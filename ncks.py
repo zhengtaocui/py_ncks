@@ -83,6 +83,56 @@ class WRFHydroModelProduct:
 
         outnc.close()
 
+      def thinToVariableLand(self, varname, outncfilename ):
+
+        outnc = netCDF4.Dataset( outncfilename, "w", format=self.nc_fid.data_model )
+
+        for name, dimension in self.nc_fid.dimensions.iteritems():
+	  outnc.createDimension(name, len(dimension) \
+			  if not dimension.isunlimited() else None)
+
+	for name, variable in self.nc_fid.variables.iteritems():
+	    # take out the variable you don't want
+	    if name == varname or name == "time" or name == "x" or name == "y" \
+			    or name == "reference_time": 
+              x = outnc.createVariable( name, variable.datatype, \
+			    variable.dimensions)
+
+	      for vattname in variable.ncattrs() :
+	         x.setncattr( vattname, variable.getncattr( vattname ) )
+
+              outnc.variables[name][:] = self.nc_fid.variables[name][:]
+
+	for name in self.nc_fid.ncattrs():
+	    outnc.setncattr( name,  self.nc_fid.getncattr( name ) )
+
+        outnc.close()
+
+      def thinToVariableChannel(self, varname, outncfilename ):
+
+        outnc = netCDF4.Dataset( outncfilename, "w", format=self.nc_fid.data_model )
+
+        for name, dimension in self.nc_fid.dimensions.iteritems():
+	  outnc.createDimension(name, len(dimension) \
+			  if not dimension.isunlimited() else None)
+
+	for name, variable in self.nc_fid.variables.iteritems():
+	    # take out the variable you don't want
+	    if name == varname or name == "time" or name == "feature_id" \
+			    or name == "reference_time": 
+              x = outnc.createVariable( name, variable.datatype, \
+			    variable.dimensions)
+
+	      for vattname in variable.ncattrs() :
+	         x.setncattr( vattname, variable.getncattr( vattname ) )
+
+              outnc.variables[name][:] = self.nc_fid.variables[name][:]
+
+	for name in self.nc_fid.ncattrs():
+	    outnc.setncattr( name,  self.nc_fid.getncattr( name ) )
+
+        outnc.close()
+
 
 def create_outputdir_and_get_list_of_files( indir, outdir, cases, datetimetag):
 

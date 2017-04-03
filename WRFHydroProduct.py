@@ -1,3 +1,4 @@
+import re
 import netCDF4     
 import numpy as np 
 from string import *
@@ -5,9 +6,8 @@ from string import *
 class WRFHydroModelProduct:
 
       def __init__(self, ncFileName ):
-        print ncFileName
         self.prodId = ncFileName
-        self.nc_fid = netCDF4.Dataset( ncFileName, "r+" )  
+        self.nc_fid = netCDF4.Dataset( ncFileName, "r" )  
 
 
       def thinToVariable(self, varname, outncfilename ):
@@ -45,10 +45,10 @@ class WRFHydroModelProduct:
 	      
       def getProductType(self ):
 
-	      if re.match( r'.*\.usgsTimeSlices\.ncdf', self.prodId ) :
+	      if re.match( r'.*\.usgsTimeSlice\.ncdf', self.prodId ) :
 		      return 'usgs_timeslices'
-	      elif re.match( r'HYDRO_RST\..*_DOMAIN1\.[0-9]?', self.prodId ) \
-                or re.match( r'RESTART\..*_DOMAIN1\.[0-9]?', self.prodId )  \
+	      elif re.match( r'HYDRO_RST\..*_DOMAIN1', self.prodId ) \
+                or re.match( r'RESTART\..*_DOMAIN1', self.prodId )  \
                 or re.match( r'nudgingLastObs\..*\.nc', self.prodId ): 
 		      return 'restart'
 	      elif re.match( \
@@ -61,6 +61,13 @@ class WRFHydroModelProduct:
 
               else:
 		      return None
+
+      def getNumberOfUSGSStations(self ):
+	      if 'usgs_timeslices' != self.getProductType() :
+                  raise RuntimeError( "Product is not a USGS timeslices " + \
+				  self.prodId )
+	      return (self.nc_fid.getncattr( 'sliceCenterTimeUTC' ), \
+			       self.nc_fid.variables[ 'stationId' ].shape[0] )
 
       def close(self):
          self.nc_fid.close()
