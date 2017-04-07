@@ -252,6 +252,17 @@ class NWMCom:
               for f in self.filenames[ 'usgs_timeslices' ]:
                    fn = self.dir + '/nwm.' + self.pdy + \
 				   '/usgs_timeslices/'+ f
+		   nextday = datetime.strptime( self.pdy, "%Y%m%d" ) + \
+				   timedelta(days=1)
+
+                   nextdayfn = self.dir + '/nwm.' + \
+				   nextday.strftime( "%Y%m%d" ) + \
+				   '/usgs_timeslices/'+ f
+
+		   if os.path.exists( nextdayfn ) and \
+				   os.path.isfile( nextdayfn ) :
+                        fn = nextdayfn
+
 		   #print fn
 		   if os.path.exists( fn ) and os.path.isfile( fn ) :
 
