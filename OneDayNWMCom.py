@@ -29,3 +29,76 @@ class OneDayNWMCom:
 	     numofstations += \
 		  com.getTimeSlicesNumberOfStations()
           return numofstations
+
+      def getUSGSStationRealTimeStreamFlow( self, stationId ):
+	  flows = []
+          for com in self.oneDayCom:
+	     flows += \
+		  com.getUSGSStationRealTimeStreamFlow(stationId)
+          return flows
+
+      def getForecastPoint( self,  wrfhydr_chn_pts, latlon):
+	      chn_pts = netCDF4.Dataset( wrfhydr_chn_pts, "r" )
+
+              dim = chn_pts.dimensions[ "feature_id" ]
+	      print dim
+	      print dim.size
+
+              feaidlist = []
+	      for id in range( 0, dim.size ):
+                   feaidlist.append( ( chn_pts.variables["feature_id"][id], \
+		      (chn_pts.variables["longitude"][id] - latlon[1]) * \
+		      (chn_pts.variables["longitude"][id] - latlon[1]) +\
+		      (chn_pts.variables["latitude"][id] - latlon[0]) * \
+		      (chn_pts.variables["latitude"][id] - latlon[0]) ) )
+		   print id, chn_pts.variables["feature_id"][id], \
+			   chn_pts.variables["longitude"][id] - latlon[1], \
+			   chn_pts.variables["latitude"][id] - latlon[0] 
+
+	      sortedfeaid = sorted( feaidlist, key=lambda id: id[1] )
+
+              print "nearst feature id = ", sortedfeaid[ 0 ]
+	      return sortedfeaid[ 0 ]
+
+              chn_pts.close()
+
+      @staticmethod
+      def getForecastPointByUSGSStation( routlinknc, gsstation):
+	      rutlnk = netCDF4.Dataset( routlinknc, "r" )
+	      links = rutlnk.variables[ "link" ][:]
+	      gages = rutlnk.variables[ "gages" ][:]
+	      rutlnk.close()
+
+              sta = '{0: >15}'.format( gsstation )
+	      for g, l in  zip( gages, links ):
+		     if netCDF4.chartostring( \
+		         np.asarray( g ) ).tostring() == sta:
+			      return l
+
+              return None
+
+	      #gl = zip( gages, links )
+#
+#	      gl.sort()
+#
+#              link_sorted = [ l for g, l in gl ]
+#              gage_sorted = [ g for g, l in gl ]
+#
+#              idx = WRFHydroProduct.index( gage_sorted, sta )
+	      return link_sorted[ idx ]
+
+      def getStreamFlowByFeatureID( self, case, feaID, tmorf=0 ):
+	  flows = []
+          for com in self.oneDayCom:
+             flow = com.getStreamFlowByFeatureID( case, feaID, tmorf )
+	     if flow:
+	       flows.append( flow )
+          return flows
+
+      def getForecastStreamFlowByFeatureID( self, case, feaID, cycle ):
+	  flows = []
+          for com in self.oneDayCom:
+             if com.cycle == format( cycle, ">02d" ):
+              flows = com.getForecastStreamFlowByFeatureID( case, feaID )
+	      break
+          return flows

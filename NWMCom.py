@@ -1,4 +1,5 @@
 import os
+import re
 import gzip
 from datetime import datetime, timedelta
 from string import *
@@ -272,3 +273,119 @@ class NWMCom:
 		      prod.close()
               return numofstations
 
+      def getUSGSStationRealTimeStreamFlow( self, stationId ):
+	      flows = []
+              for f in self.filenames[ 'usgs_timeslices' ]:
+                   fn = self.dir + '/nwm.' + self.pdy + \
+				   '/usgs_timeslices/'+ f
+		   nextday = datetime.strptime( self.pdy, "%Y%m%d" ) + \
+				   timedelta(days=1)
+
+                   nextdayfn = self.dir + '/nwm.' + \
+				   nextday.strftime( "%Y%m%d" ) + \
+				   '/usgs_timeslices/'+ f
+
+		   if os.path.exists( nextdayfn ) and \
+				   os.path.isfile( nextdayfn ) :
+                        fn = nextdayfn
+
+		   #print fn
+		   if os.path.exists( fn ) and os.path.isfile( fn ) :
+
+                      prod = WRFHydroModelProduct( fn )
+		      flow = prod.getUSGSStationRealTimeStreamFlow(\
+			      stationId )
+		      if flow: 
+		        flows.append( flow )
+		      prod.close()
+              return flows
+
+      def getStreamFlowByFeatureID( self, case, feaID, tmorf=0 ):
+	      time_flow = None
+              dt = datetime.strptime( self.pdy+self.cycle, "%Y%m%d%H" )
+	      if case == 'analysis_assim':
+		      dt -= timedelta( hours = tmorf )
+	      else:
+		      dt += timedelta( hours = tmorf )
+
+              for f in self.filenames[ case ]:
+                   fn = self.dir + '/nwm.' + self.pdy + \
+				   '/' + case + '/'+ f
+		   if re.match( \
+		      r'nwm.t[0-9][0-9]z\..*\.channel_rt\.(tm{0:02d}|f{0:03d})\.conus.nc'.format( tmorf ), f ):
+		     print fn
+		     if os.path.exists( fn ) and os.path.isfile( fn ) :
+
+                        prod = WRFHydroModelProduct( fn )
+	   	        flow = prod.getStreamFlowByFeatureID( feaID )
+		        if flow: 
+                          print 'flow = ', flow
+		          time_flow = (dt, flow )
+		        prod.close()
+                     break;
+              return time_flow
+
+      def getForecastStreamFlowByFeatureID( self, case, feaID ):
+	      time_flow = []
+              dt = datetime.strptime( self.pdy+self.cycle, "%Y%m%d%H" )
+	      if case == 'analysis_assim':
+		      start = 2 
+		      step = -1
+		      end = -1 
+	      elif case == 'short_range':
+		      start = 0 
+		      step = 1
+                      end = 19
+	      elif case == 'medium_range':
+		      start = 0 
+		      step = 3
+		      end = 240
+	      elif case == 'long_range_mem1' or \
+	           case == 'long_range_mem2' or \
+	           case == 'long_range_mem3' or \
+		   case == 'long_range_mem4':
+		      start = 0 
+		      step = 6 
+		      end = 720
+	      else:
+		      raise RuntimeError( "FATAL ERROR: Unknown caseType: " \
+			+ case )
+
+              for f in range(start, end, step ):
+	          if case == 'analysis_assim':
+                     fn = self.dir + '/nwm.' + self.pdy + \
+				     '/' + case + '/'+  \
+				   'nwm.t' + self.cycle + 'z.' + \
+                      'analysis_assim.channel_rt.tm{0:02d}.conus.nc'.format( f )
+
+		     timeofrec = dt - timedelta( hours = f )
+                  elif case == 'long_range_mem1' or \
+                       case == 'long_range_mem2' or \
+                       case == 'long_range_mem3' or \
+		       case == 'long_range_mem4':
+                     fn = self.dir + '/nwm.' + self.pdy + \
+				     '/' + case + '/'+  \
+				   'nwm.t' + self.cycle + 'z.' + \
+                      'long_range.channel_rt_' + case[-1] + \
+		      '.f{0:03d}.conus.nc'.format( f )
+
+		     timeofrec = dt + timedelta( hours = f )
+
+	          else:
+                     fn = self.dir + '/nwm.' + self.pdy + \
+				     '/' + case + '/'+  \
+				   'nwm.t' + self.cycle + 'z.' + \
+                      case + '.channel_rt.f{0:03d}.conus.nc'.format( f )
+
+		     timeofrec = dt + timedelta( hours = f )
+
+                  print ('fn = ', fn )
+		  if os.path.exists( fn ) and os.path.isfile( fn ) :
+
+                     prod = WRFHydroModelProduct( fn )
+	   	     flow = prod.getStreamFlowByFeatureID( feaID )
+		     if flow: 
+		        time_flow.append( (timeofrec, flow ) )
+		     prod.close()
+
+              return time_flow

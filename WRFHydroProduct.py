@@ -2,6 +2,14 @@ import re
 import netCDF4     
 import numpy as np 
 from string import *
+import bisect
+
+def index(a, x):
+    'Locate the leftmost value exactly equal to x'
+    i = bisect.bisect_left(a, x)
+    if i != len(a) and a[i] == x:
+           return i
+    raise ValueError
 
 class WRFHydroModelProduct:
 
@@ -52,12 +60,12 @@ class WRFHydroModelProduct:
                 or re.match( r'nudgingLastObs\..*\.nc', self.prodId ): 
 		      return 'restart'
 	      elif re.match( \
-		      r'nwm.t[0-9]{2}z\..*\.(tm00|f[0-9]{3})\.conus\.nc',\
+		      r'.*\/nwm.t[0-9]{2}z\..*\.(tm0[0-2]|f[0-9]{3})\.conus\.nc',\
 			      self.prodId ):
 
 		      m = re.match( \
-		       r'nwm.t[0-9]{2}z\.(.*)\..*\.conus\.nc', self.prodId )
-		      return m.group(1)
+		       r'.*\/nwm.t[0-9]{2}z\.(.*)\.(.*)\.(tm0[0-2]|f[0-9]{3})\.conus\.nc', self.prodId )
+		      return m.group(2)
 
               else:
 		      return None
@@ -68,6 +76,44 @@ class WRFHydroModelProduct:
 				  self.prodId )
 	      return (self.nc_fid.getncattr( 'sliceCenterTimeUTC' ), \
 			       self.nc_fid.variables[ 'stationId' ].shape[0] )
+
+      def getUSGSStationRealTimeStreamFlow(self, stationId ):
+	   if 'usgs_timeslices' != self.getProductType() :
+             raise RuntimeError( "Product is not a USGS timeslices "+\
+				  self.prodId )
+           flow = None
+	   for sta, dis, qual in zip( \
+		   self.nc_fid.variables[ 'stationId' ],\
+		   self.nc_fid.variables[ 'discharge' ], \
+		   self.nc_fid.variables[ 'discharge_quality' ] ):
+	       station = netCDF4.chartostring( \
+			       np.asarray( sta ) ).tostring()
+	       if station.strip() == stationId:
+		  if np.asarray( qual ) > 0:
+                     flow = np.asarray( dis )
+                  print ("found station: ", self.prodId, station, flow.item(0) )
+		  break
+	   print self.nc_fid.getncattr( 'sliceCenterTimeUTC' )
+           if flow:
+	      return (self.nc_fid.getncattr( 'sliceCenterTimeUTC' ), \
+	                      flow.item(0) )
+           else:
+	      return None
+
+      def getStreamFlowByFeatureID(self, feaID ):
+	      print "type = ",  self.getProductType()[0:10]
+	      if 'channel_rt' != self.getProductType()[0:10] :
+		      raise RuntimeError( "Product is not a channel_rt: " + \
+				  self.prodId )
+              dim = self.nc_fid.dimensions[ "feature_id" ]
+#	      print 'feaID = ', feaID
+#	      print 'dim = ', dim
+
+              flow=self.nc_fid.variables[ "streamflow" ]
+#              print flow
+	      idx = index( self.nc_fid.variables[ "feature_id" ], feaID )
+
+              return flow[idx] 
 
       def close(self):
          self.nc_fid.close()

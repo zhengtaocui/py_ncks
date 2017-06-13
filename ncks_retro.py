@@ -87,13 +87,23 @@ class WRFHydroModelProduct:
               x = outnc.createVariable( name, variable.datatype, \
 			    variable.dimensions)
 
+	      atts = dict()
 	      for vattname in variable.ncattrs() :
-	         x.setncattr( vattname, maybe_encode( variable.getncattr( vattname ) ) )
+	         #x.setncattr( vattname, maybe_encode( variable.getncattr( vattname ) ) )
+	         #x.setncattr( vattname, variable.getncattr( vattname ) )
+		 att = maybe_encode( variable.getncattr( vattname ) )
+		 atts[ vattname ] = att
 
+              x.setncatts( atts )
               outnc.variables[name][:] = self.nc_fid.variables[name][:]
 
+	atts = dict()
 	for name in self.nc_fid.ncattrs():
-	    outnc.setncattr( name,  maybe_encode( self.nc_fid.getncattr( name ) ) )
+            att = self.nc_fid.getncattr( name )
+	    atts[ name ] = maybe_encode( att )
+	    #outnc.setncattr( name,  maybe_encode( self.nc_fid.getncattr( name ) ) )
+	    #outnc.setncattr( name,  self.nc_fid.getncattr( name ) )
+        outnc.setncatts( atts )
 
         outnc.close()
 
@@ -111,13 +121,26 @@ class WRFHydroModelProduct:
               x = outnc.createVariable( name, variable.datatype, \
 			    variable.dimensions, zlib = True, complevel = 2)
 
-	      for vattname in variable.ncattrs() :
-	         x.setncattr( vattname, maybe_encode( variable.getncattr( vattname ) ) )
+	      #x.set_auto_chartostring( True )
 
+	      atts = dict()
+	      #x.setncattr( 'testatt', 'mytest' )
+	      for vattname in variable.ncattrs() :
+	         #x.setncattr( vattname, maybe_encode( variable.getncattr( vattname ) ) )
+		 att = maybe_encode( variable.getncattr( vattname ) )
+#                 print ('vattname: ', vattname , att )
+#	         x.setncattr( vattname,att )
+		 atts[ vattname ] = att
+
+              x.setncatts( atts )
               outnc.variables[name][:] = self.nc_fid.variables[name][:]
 
+	atts = dict()
 	for name in self.nc_fid.ncattrs():
-	    outnc.setncattr( name,  maybe_encode( self.nc_fid.getncattr( name ) ) )
+            att = self.nc_fid.getncattr( name )
+	    atts[ name ] = maybe_encode( att )
+	    #outnc.setncattr( name,  self.nc_fid.getncattr( name ) )
+        outnc.setncatts( atts )
 
         outnc.close()
 
@@ -198,14 +221,14 @@ def create_outputdir_and_get_list_of_files( indir, outdir, cases, datetimetag):
 #       print "create_outputdir_and_get_list_of_files:", file
 #       allfiles.append( '/nwm.' + datetimetag + '/' + case +'/' + file )
 
-     land_files = [ f for f in os.listdir( nwmdir ) \
-		   if re.match( \
-	   r'nwm.t[0-9]{2}z\..*land(_[0-9])?\.(tm0[0-2]|f[0-9]{3})\.conus.nc(.gz)?',\
-                    f ) ]
-
-     for file in land_files:
-       print "create_outputdir_and_get_list_of_files:", file
-       allfiles.append( '/nwm.' + datetimetag + '/' + case +'/' + file )
+#     land_files = [ f for f in os.listdir( nwmdir ) \
+#		   if re.match( \
+#	   r'nwm.t[0-9]{2}z\..*land(_[0-9])?\.(tm0[0-2]|f[0-9]{3})\.conus.nc(.gz)?',\
+#                    f ) ]
+#
+#     for file in land_files:
+#       print "create_outputdir_and_get_list_of_files:", file
+#       allfiles.append( '/nwm.' + datetimetag + '/' + case +'/' + file )
 
 #     chn_files = [ f for f in os.listdir( nwmdir ) \
 #		   if re.match( \
@@ -216,14 +239,14 @@ def create_outputdir_and_get_list_of_files( indir, outdir, cases, datetimetag):
 #       print "create_outputdir_and_get_list_of_files:", file
 #       allfiles.append( '/nwm.' + datetimetag + '/' + case +'/' + file )
 
-#     forcing_files = [ f for f in os.listdir( nwmdir ) \
-#		   if re.match( \
-#	   r'nwm.t[0-9]{2}z\..*\.forcing\.(tm0[0-2]|f[0-9]{3})\.conus.nc(.gz)?',\
-#                    f ) ]
-#
-#     for file in forcing_files:
-#       print "create_outputdir_and_get_list_of_files:", file
-#       allfiles.append( '/nwm.' + datetimetag + '/' + case +'/' + file )
+     forcing_files = [ f for f in os.listdir( nwmdir ) \
+		   if re.match( \
+	   r'nwm.t[0-9]{2}z\..*\.forcing\.(tm0[0-2]|f[0-9]{3})\.conus.nc(.gz)?',\
+                    f ) ]
+
+     for file in forcing_files:
+       print "create_outputdir_and_get_list_of_files:", file
+       allfiles.append( '/nwm.' + datetimetag + '/' + case +'/' + file )
 
   return allfiles
 
@@ -282,7 +305,7 @@ enddate = pgmopt[3]
 #		'forcing_long_range_mem3', \
 #		'forcing_long_range_mem4' ]
 
-cases = ['analysis_assim' ]
+cases = ['forcing_medium_range' ]
 sd = datetime.strptime(startdate, "%Y%m%d")
 ed = datetime.strptime(enddate, "%Y%m%d")
 
@@ -328,5 +351,7 @@ while sd <= ed:
 	 thin_files( indir + file, outdir + file,\
            [ "RAINRATE", "T2D", "time","reference_time",\
 	   "x","y","ProjectionCoordinateSystem"])
+#	 thin_files( indir + file, outdir + file,\
+#           [ "RAINRATE"])
 
    sd += timedelta( days = 1 )
