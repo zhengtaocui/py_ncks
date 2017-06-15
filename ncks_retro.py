@@ -221,23 +221,23 @@ def create_outputdir_and_get_list_of_files( indir, outdir, cases, datetimetag):
 #       print "create_outputdir_and_get_list_of_files:", file
 #       allfiles.append( '/nwm.' + datetimetag + '/' + case +'/' + file )
 
-#     land_files = [ f for f in os.listdir( nwmdir ) \
-#		   if re.match( \
-#	   r'nwm.t[0-9]{2}z\..*land(_[0-9])?\.(tm0[0-2]|f[0-9]{3})\.conus.nc(.gz)?',\
-#                    f ) ]
-#
-#     for file in land_files:
-#       print "create_outputdir_and_get_list_of_files:", file
-#       allfiles.append( '/nwm.' + datetimetag + '/' + case +'/' + file )
+     land_files = [ f for f in os.listdir( nwmdir ) \
+		   if re.match( \
+	   r'nwm.t[0-9]{2}z\..*land(_[0-9])?\.(tm0[0-2]|f[0-9]{3})\.conus.nc(.gz)?',\
+                    f ) ]
 
-#     chn_files = [ f for f in os.listdir( nwmdir ) \
-#		   if re.match( \
-#	   r'nwm.t[0-9]{2}z\..*channel_rt(_[0-9])?\.(tm0[0-2]|f[0-9]{3})\.conus.nc(.gz)?',\
-#                    f ) ]
-#
-#     for file in chn_files:
-#       print "create_outputdir_and_get_list_of_files:", file
-#       allfiles.append( '/nwm.' + datetimetag + '/' + case +'/' + file )
+     for file in land_files:
+       print "create_outputdir_and_get_list_of_files:", file
+       allfiles.append( '/nwm.' + datetimetag + '/' + case +'/' + file )
+
+     chn_files = [ f for f in os.listdir( nwmdir ) \
+		   if re.match( \
+	   r'nwm.t[0-9]{2}z\..*channel_rt(_[0-9])?\.(tm0[0-2]|f[0-9]{3})\.conus.nc(.gz)?',\
+                    f ) ]
+
+     for file in chn_files:
+       print "create_outputdir_and_get_list_of_files:", file
+       allfiles.append( '/nwm.' + datetimetag + '/' + case +'/' + file )
 
      forcing_files = [ f for f in os.listdir( nwmdir ) \
 		   if re.match( \
@@ -294,18 +294,18 @@ outdir = pgmopt[1]
 startdate = pgmopt[2]
 enddate = pgmopt[3]
 
-#cases = ['analysis_assim', 'short_range', 'medium_range',\
-#		'long_range_mem1', 'long_range_mem2',\
-#		'long_range_mem3', 'long_range_mem4', \
-#		'forcing_analysis_assim', \
-#		'forcing_short_range', \
-#		'forcing_medium_range', \
-#		'forcing_long_range_mem1', \
-#		'forcing_long_range_mem2', \
-#		'forcing_long_range_mem3', \
-#		'forcing_long_range_mem4' ]
+cases = ['analysis_assim', 'short_range', 'medium_range',\
+		'long_range_mem1', 'long_range_mem2',\
+		'long_range_mem3', 'long_range_mem4', \
+		'forcing_analysis_assim', \
+		'forcing_short_range', \
+		'forcing_medium_range', \
+		'forcing_long_range_mem1', \
+		'forcing_long_range_mem2', \
+		'forcing_long_range_mem3', \
+		'forcing_long_range_mem4' ]
 
-cases = ['forcing_medium_range' ]
+#cases = ['forcing_medium_range' ]
 sd = datetime.strptime(startdate, "%Y%m%d")
 ed = datetime.strptime(enddate, "%Y%m%d")
 
