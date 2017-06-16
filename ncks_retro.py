@@ -109,7 +109,8 @@ class WRFHydroModelProduct:
 
       def thinToVariables(self, varnames, outncfilename ):
 
-        outnc = netCDF4.Dataset( outncfilename, "w", format=self.nc_fid.data_model )
+        #outnc = netCDF4.Dataset( outncfilename, "w", format=self.nc_fid.data_model )
+        outnc = netCDF4.Dataset( outncfilename, "w", format='NETCDF4' )
 
         for name, dimension in self.nc_fid.dimensions.iteritems():
 	  outnc.createDimension(name, len(dimension) \
@@ -296,14 +297,14 @@ enddate = pgmopt[3]
 
 cases = ['analysis_assim', 'short_range', 'medium_range',\
 		'long_range_mem1', 'long_range_mem2',\
-		'long_range_mem3', 'long_range_mem4', \
-		'forcing_analysis_assim', \
-		'forcing_short_range', \
-		'forcing_medium_range', \
-		'forcing_long_range_mem1', \
-		'forcing_long_range_mem2', \
-		'forcing_long_range_mem3', \
-		'forcing_long_range_mem4' ]
+		'long_range_mem3', 'long_range_mem4' ]
+#		'forcing_analysis_assim', \
+#		'forcing_short_range', \
+#		'forcing_medium_range' ]
+#		'forcing_long_range_mem1', \
+#		'forcing_long_range_mem2', \
+#		'forcing_long_range_mem3', \
+#		'forcing_long_range_mem4' ]
 
 #cases = ['forcing_medium_range' ]
 sd = datetime.strptime(startdate, "%Y%m%d")
@@ -329,7 +330,8 @@ while sd <= ed:
 	   "x","y","ProjectionCoordinateSystem"] )
 			 
       elif re.match( \
-         r'.*/nwm.t[0-9]{2}z\.(medium_range|long_range)\.land(_[0-9])?\.f[0-9]{3}\.conus.nc(.gz)?', file ) :
+#         r'.*/nwm.t[0-9]{2}z\.(medium_range|long_range)\.land(_[0-9])?\.f[0-9]{3}\.conus.nc(.gz)?', file ) :
+         r'.*/nwm.t[0-9]{2}z\.medium_range\.land(_[0-9])?\.f[0-9]{3}\.conus.nc(.gz)?', file ) :
 	 thin_files( indir + file, outdir + file,\
              [ "SNEQV", "SOILSAT_TOP","time","reference_time",\
 	     "x","y","ProjectionCoordinateSystem"])
@@ -340,7 +342,7 @@ while sd <= ed:
       elif re.match( \
          r'.*/nwm.t[0-9]{2}z\..*channel_rt(_[0-9])?\.f[0-9]{3}\.conus.nc(.gz)?', file ) :
 	 thin_files( indir + file, outdir + file,\
-           ['streamflow', 'feature_id','nudge','time','reference_time'])
+           ['streamflow', 'feature_id','time','reference_time'])
       elif re.match( \
          r'.*/nwm.t[0-9]{2}z\..*channel_rt(_[0-9])?\.tm0[012]\.conus.nc(.gz)?', file ) :
 	 thin_files( indir + file, outdir + file,\
