@@ -164,6 +164,7 @@ feaid = OneDayNWMCom.getForecastPointByUSGSStation( rutlnk, usgsSta )
 print "feaid = ", feaid
 
 startCom = OneDayNWMCom( comdir, startpdy.strftime(  "%Y%m%d" ) )
+print "Get Analysis Forecast ... "
 if ana is not None:
 	for c in ana:
             srCom = OneDayNWMCom( comdir, ana[:8] ) 
@@ -171,14 +172,16 @@ if ana is not None:
 	       srCom.getForecastStreamFlowByFeatureID( 'analysis_assim', \
 		  feaid, int( ana[8:]) ) )
 
+print "Get Short Range Forecast ... "
 if sr is not None:
 	for c in sr:
             srCom = OneDayNWMCom( comdir, c[:8] ) 
             fcstFlowSRt00z.append( \
 	       srCom.getForecastStreamFlowByFeatureID( 'short_range', \
 		  feaid, int( c[8:]) ) )
-#  print "fcstFlowSRt00z: ", fcstFlowSRt00z
+#        print "fcstFlowSRt00z: ", fcstFlowSRt00z
 
+print "Get Medium Range Forecast ... "
 if mr is not None:
 	for c in mr:
           mrCom = OneDayNWMCom( comdir, c[:8] ) 
@@ -186,6 +189,7 @@ if mr is not None:
 	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range', \
 		  feaid, int( c[8:]) ) )
 
+print "Get Long Range Mem1 Forecast ... "
 if lr1 is not None:
 	for c in lr1:
           lr1Com = OneDayNWMCom( comdir, c[:8] ) 
@@ -193,6 +197,7 @@ if lr1 is not None:
 	     lr1Com.getForecastStreamFlowByFeatureID( 'long_range_mem1', \
 		  feaid, int( c[8:]) ) )
 
+print "Get Long Range Mem2 Forecast ... "
 if lr2 is not None:
 	for c in lr2:
           lr2Com = OneDayNWMCom( comdir, c[:8] ) 
@@ -200,12 +205,15 @@ if lr2 is not None:
 		  lr2Com.getForecastStreamFlowByFeatureID( \
 		  'long_range_mem2', feaid, int( c[8:]) ) )
 
+print "Get Long Range Mem3 Forecast ... "
 if lr3 is not None:
 	for c in lr3:
           lr3Com = OneDayNWMCom( comdir, c[:8] ) 
           fcstFlowLR3t00z.append( \
 		  lr3Com.getForecastStreamFlowByFeatureID( \
 		  'long_range_mem3', feaid, int( c[8:]) ) )
+
+print "Get Long Range Mem4 Forecast ... "
 if lr4 is not None:
 	for c in lr4:
           lr4Com = OneDayNWMCom( comdir, c[:8] ) 
@@ -223,10 +231,13 @@ while dateiter < endpdy:
 #    com.getForecastPoint( "/gpfs/hps/nwc/noscrub/Brian.Cosgrove/nwm_parm.v1.2/1.2/template/WRF_Hydro_NWM_v1.1_geospatial_data_template_channel_point_netcdf.nc", [37.37569444, -91.5528056] )
 
     if tm0 is not None and dateiter >= tm0dt:
+       print "Get tm0 ... ", dateiter
        simdFlowtm0 += com.getStreamFlowByFeatureID( 'analysis_assim', feaid, 0 )
     if tm1 is not None and dateiter >= tm1dt:
+       print "Get tm1 ... ", dateiter
        simdFlowtm1 += com.getStreamFlowByFeatureID( 'analysis_assim', feaid, 1 )
     if tm2 is not None and dateiter >= tm2dt:
+       print "Get tm2 ... ", dateiter
        simdFlowtm2 += com.getStreamFlowByFeatureID( 'analysis_assim', feaid, 2 )
 
     flow += com.getUSGSStationRealTimeStreamFlow( usgsSta )
@@ -250,24 +261,18 @@ simdflowtm2_date = []
 simdflowtm2_value = []
 
 for f in simdFlowtm0:
-   print ( f )
    simdflowtm0_value.append( f[1] )
-   print f[0], f[1]
    simdflowtm0_date.append( f[0] )
 
-print simdFlowtm1
 for f in simdFlowtm1:
-   print ( f )
    simdflowtm1_value.append( f[1] )
-   print f[0], f[1]
    simdflowtm1_date.append( f[0] )
 
 for f in simdFlowtm2:
-   print ( f )
    simdflowtm2_value.append( f[1] )
-   print f[0], f[1]
    simdflowtm2_date.append( f[0] )
 
+print "Make figure ... "
 
 fig = Figure(figsize=(3*4,3*3))
 

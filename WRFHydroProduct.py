@@ -93,7 +93,7 @@ class WRFHydroModelProduct:
                      flow = np.asarray( dis )
                   print ("found station: ", self.prodId, station, flow.item(0) )
 		  break
-	   print self.nc_fid.getncattr( 'sliceCenterTimeUTC' )
+#	   print self.nc_fid.getncattr( 'sliceCenterTimeUTC' )
            if flow:
 	      return (self.nc_fid.getncattr( 'sliceCenterTimeUTC' ), \
 	                      flow.item(0) )
@@ -101,7 +101,7 @@ class WRFHydroModelProduct:
 	      return None
 
       def getStreamFlowByFeatureID(self, feaID ):
-	      print "type = ",  self.getProductType()[0:10]
+#	      print "type = ",  self.getProductType()[0:10]
 	      if 'channel_rt' != self.getProductType()[0:10] :
 		      raise RuntimeError( "Product is not a channel_rt: " + \
 				  self.prodId )

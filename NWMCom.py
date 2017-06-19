@@ -313,13 +313,11 @@ class NWMCom:
 				   '/' + case + '/'+ f
 		   if re.match( \
 		      r'nwm.t[0-9][0-9]z\..*\.channel_rt\.(tm{0:02d}|f{0:03d})\.conus.nc'.format( tmorf ), f ):
-		     print fn
 		     if os.path.exists( fn ) and os.path.isfile( fn ) :
 
                         prod = WRFHydroModelProduct( fn )
 	   	        flow = prod.getStreamFlowByFeatureID( feaID )
 		        if flow: 
-                          print 'flow = ', flow
 		          time_flow = (dt, flow )
 		        prod.close()
                      break;
@@ -379,13 +377,10 @@ class NWMCom:
 
 		     timeofrec = dt + timedelta( hours = f )
 
-                  print ('fn = ', fn )
 		  if os.path.exists( fn ) and os.path.isfile( fn ) :
-
                      prod = WRFHydroModelProduct( fn )
 	   	     flow = prod.getStreamFlowByFeatureID( feaID )
 		     if flow: 
 		        time_flow.append( (timeofrec, flow ) )
 		     prod.close()
-
               return time_flow
