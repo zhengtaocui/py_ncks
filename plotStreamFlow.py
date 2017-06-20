@@ -366,7 +366,7 @@ else:
    ax.set_xlabel( startpdy.strftime(  "%Y" ) + '-' + endpdy.strftime(  "%Y" ) )
 
 ax.set_ylabel( 'Streamflow($\mathsf{m^3/s}$)' )
-ax.legend()
+ax.legend(loc='center', ncol=4, bbox_to_anchor=(0.5,-0.18))
 
 if outfile is not None:
    canvas.print_figure( outfile + '.pdf' )
