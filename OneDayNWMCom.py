@@ -30,6 +30,14 @@ class OneDayNWMCom:
 		  com.getTimeSlicesNumberOfStations()
           return numofstations
 
+      def getUSGSTimeSlicesNumOfStationsByCycle( self, cycle ):
+	  numofstations = []
+          for com in self.oneDayCom:
+             if com.cycle == format( cycle, ">02d" ):
+	       numofstations += com.getTimeSlicesNumberOfStations()
+	      break
+          return numofstations
+
       def getUSGSStationRealTimeStreamFlow( self, stationId ):
 	  flows = []
           for com in self.oneDayCom:
