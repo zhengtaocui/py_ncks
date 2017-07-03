@@ -102,3 +102,9 @@ class OneDayNWMCom:
               flows = com.getForecastStreamFlowByFeatureID( case, feaID )
 	      break
           return flows
+
+      def getVariable( self, case, type, cyc, var, tmorf=0):
+	      return self.oneDayCom[ cyc ].getVariable( case, type, var, tmorf )
+
+      def getComCycle( self, cyc ):
+	      return self.oneDayCom[ cyc ]

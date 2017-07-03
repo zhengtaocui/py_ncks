@@ -51,6 +51,19 @@ class WRFHydroModelProduct:
 	 self.nc_fid.variables[ varname ][:] += \
 	                          other.nc_fid.variables[ varname ][:]
 	      
+      def getVariable( self, varname ):
+	      if varname not in self.nc_fid.variables:
+                 raise RuntimeError( "Variable does not exist: " + varname )
+
+              print 'shape', self.nc_fid.variables[ varname ].shape
+	      return self.nc_fid.variables[ varname ][:]
+	      
+      def getVariableAttributes( self, varname, attname ):
+	      if varname not in self.nc_fid.variables:
+                 raise RuntimeError( "Variable does not exist: " + varname )
+
+	      return self.nc_fid.variables[ varname ].getncattr( attname )
+      
       def getProductType(self ):
 
 	      if re.match( r'.*\.usgsTimeSlice\.ncdf', self.prodId ) :

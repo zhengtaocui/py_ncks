@@ -384,3 +384,79 @@ class NWMCom:
 		        time_flow.append( (timeofrec, flow ) )
 		     prod.close()
               return time_flow
+
+      def getVariable( self, case, type, var, tmorf=0 ):
+	      values = None
+
+	      if case[:8] == 'forcing_':
+	         if case == 'forcing_analysis_assim':
+			 fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+				     '/nwm.t' + self.cycle + 'z.' + \
+				     case[:8] + '.' + type + \
+			      '.tm{0:02d}.conus.nc'.format( tmorf )
+	         else:
+		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+				     '/nwm.t' + self.cycle + 'z.' + \
+				     case[8:] + '.' + type + \
+			      '.f{0:03d}.conus.nc'.format( tmorf )
+	      else:
+
+	         if case == 'analysis_assim':
+		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+				     '/nwm.t' + self.cycle + 'z.' + \
+				      case + '.' + type + \
+			      '.tm{0:02d}.conus.nc'.format( tmorf )
+	         else:
+		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+				     '/nwm.t' + self.cycle + 'z.' + \
+				      case + '.' + type + \
+			      '.f{0:03d}.conus.nc'.format( tmorf )
+
+	      if os.path.exists( fn ) and os.path.isfile( fn ) :
+
+                        prod = WRFHydroModelProduct( fn )
+                      
+		        try:
+	   	          values = prod.getVariable( var )
+
+			except RuntimeError as e:
+                             raise e
+	      else:
+		      raise RuntimeError( " file: " + fn + " does not exist!")
+
+              return values 
+
+      def getWRFHydroProd( self, case, type, var, tmorf=0 ):
+	      prod = None
+	      if case[:8] == 'forcing_':
+	         if case == 'forcing_analysis_assim':
+			 fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+				     '/nwm.t' + self.cycle + 'z.' + \
+				     case[:8] + '.' + type + \
+			      '.tm{0:02d}.conus.nc'.format( tmorf )
+	         else:
+		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+				     '/nwm.t' + self.cycle + 'z.' + \
+				     case[8:] + '.' + type + \
+			      '.f{0:03d}.conus.nc'.format( tmorf )
+	      else:
+
+	         if case == 'analysis_assim':
+		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+				     '/nwm.t' + self.cycle + 'z.' + \
+				      case + '.' + type + \
+			      '.tm{0:02d}.conus.nc'.format( tmorf )
+	         else:
+		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+				     '/nwm.t' + self.cycle + 'z.' + \
+				      case + '.' + type + \
+			      '.f{0:03d}.conus.nc'.format( tmorf )
+
+	      if os.path.exists( fn ) and os.path.isfile( fn ) :
+
+                        prod = WRFHydroModelProduct( fn )
+                      
+	      else:
+		      raise RuntimeError( " file: " + fn + " does not exist!")
+
+              return prod 
