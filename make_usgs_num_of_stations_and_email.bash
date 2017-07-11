@@ -17,9 +17,9 @@ cd /gpfs/hps/ptmp/Zhengtao.Cui/usgs_num_of_stations
 mv NumberOfUSGSStations.pdf NumberOfUSGSStations_prod.pdf
 
 
-/gpfs/hps/nwc/noscrub/Zhengtao.Cui/py_ncks_sss_copy/checkUSGSStatationNumbers.py -d /gpfs/hps/nco/ops/com/nwm/para -s $startpdy -e $endpdy > /gpfs/hps/ptmp/Zhengtao.Cui/usgs_num_of_stations/para.log 2>&1
+#/gpfs/hps/nwc/noscrub/Zhengtao.Cui/py_ncks_sss_copy/checkUSGSStatationNumbers.py -d /gpfs/hps/nco/ops/com/nwm/para -s $startpdy -e $endpdy > /gpfs/hps/ptmp/Zhengtao.Cui/usgs_num_of_stations/para.log 2>&1
 
-mv NumberOfUSGSStations.pdf NumberOfUSGSStations_para.pdf
+#mv NumberOfUSGSStations.pdf NumberOfUSGSStations_para.pdf
 
 #mail -s "USGS Number of Stations versus Time" -a ./NumberOfUSGSStations_prod.pdf -a NumberOfUSGSStations_para.pdf -r 'Zhengtao.Cui@noaa.gov' Zhengtao.Cui@noaa.gov <<< 'V1.0: NumberOfUSGSStations_prod.pdf\\n V1.1: NumberOfUSGSStations_para.pdf'
-echo -e "V1.0: NumberOfUSGSStations_prod.pdf\nV1.1: NumberOfUSGSStations_para.pdf" | mail -s "USGS Number of Stations versus Time" -a ./NumberOfUSGSStations_prod.pdf -a NumberOfUSGSStations_para.pdf -r 'Zhengtao.Cui@noaa.gov' Zhengtao.Cui@noaa.gov,brian.cosgrove@noaa.gov,jamesmcc@ucar.edu,gochis@ucar.edu 
+echo -e "V1.1: NumberOfUSGSStations_prod.pdf\n" | mail -s "USGS Number of Stations versus Time" -a ./NumberOfUSGSStations_prod.pdf -r 'Zhengtao.Cui@noaa.gov' Zhengtao.Cui@noaa.gov,brian.cosgrove@noaa.gov,jamesmcc@ucar.edu,gochis@ucar.edu 

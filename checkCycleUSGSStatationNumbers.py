@@ -27,13 +27,13 @@ def main(argv):
 	      getopt.getopt(argv,"hd:p:c:o:",["dir=", "pdy=", "cycle=", "output=" ])
    except getopt.GetoptError:
       print \
-        'checkCycleUSGSStatationNumbers.py -d <comdir> -p <pdy> -c <cycle> -c <output>' 
+        'checkCycleUSGSStatationNumbers.py -d <comdir> -p <pdy> -c <cycle> -o <output>' 
       sys.exit(2)
    for opt, arg in opts:
       print opt, arg
       if opt == '-h':
          print  \
-        'checkCycleUSGSStatationNumbers.py -d <comdir> -p <pdy> -c <cycle> -c <output>' 
+        'checkCycleUSGSStatationNumbers.py -d <comdir> -p <pdy> -c <cycle> -o <output>' 
          sys.exit()
       elif opt in ('-d', "--dir"):
          comdir = arg
@@ -45,7 +45,7 @@ def main(argv):
          pdy = arg
       elif opt in ('-c', "--cycle" ):
          cycle = arg
-      elif opt in ('-e', "--output" ):
+      elif opt in ('-o', "--output" ):
          output=arg
   
 #   print 'com dir is "', comdir, '"'
@@ -60,15 +60,50 @@ if __name__ == "__main__":
 
 comdir = pgmopt[0]
 pdy = pgmopt[1]
-cycle = pgmopt[2]
+cycle = int( pgmopt[2] )
+dt = datetime.strptime( pgmopt[1] + pgmopt[2], "%Y%m%d%H" )
 output = pgmopt[3]
 
 numofstationsintimeslices = []
+numofstationsintimeslices_m1 = []
+numofstationsintimeslices_m2 = []
+
+pdy_m1 = ( dt - timedelta( hours = 1) ).strftime( "%Y%m%d" )
+cycle_m1 =  ( dt - timedelta( hours = 1) ).strftime( "%H" )
+pdy_m2 = ( dt - timedelta( hours = 2) ).strftime( "%Y%m%d" )
+cycle_m2 =  ( dt - timedelta( hours = 2) ).strftime( "%H" )
 
 com = OneDayNWMCom( comdir, pdy )
-numofstationsintimeslices = com.getCycleUSGSTimeSlicesNumOfStations( cycle )
+numofstationsintimeslices = com.getUSGSTimeSlicesNumOfStationsByCycle( cycle )
 
-print numofstationsintimeslices
+com_m1 = OneDayNWMCom( comdir, pdy_m1 )
+com_m2 = OneDayNWMCom( comdir, pdy_m2 )
+numofstationsintimeslices_m1 = \
+		com_m1.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m1) )
+numofstationsintimeslices_m2 = \
+		com_m2.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m2) )
+
+print output
+print len( numofstationsintimeslices )
+outf = open( output, "a+")
+if numofstationsintimeslices:
+   print numofstationsintimeslices[0][0]
+   outf.write( numofstationsintimeslices[0][0] )
+   outf.write('\t')
+   outf.write( str( numofstationsintimeslices[0][1] ) )
+   for s in numofstationsintimeslices_m1:
+	   outf.write('\t')
+	   outf.write( str(s[1]) )
+   for s in numofstationsintimeslices_m2:
+	   outf.write('\t')
+	   outf.write( str(s[1]) )
+   outf.write('\n')
+else:
+   outf.write( pdy[:4]+'-'+ pdy[4:6] +'-'+pdy[6:8] \
+		   +'_' + format( cycle, ">02d" ) + ':00:00\t0\n')
+
+outf.close()
+
 
 #cleaning up
 
