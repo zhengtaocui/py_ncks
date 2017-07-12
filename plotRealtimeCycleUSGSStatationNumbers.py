@@ -74,14 +74,15 @@ for line in infile:
               station_num[ i ].append( values[ i + 1 ] )
       except:
 	      print "Error: ", line
+	      station_num[ i ].append( 0 )
    station_date.append( datetime.strptime( values[0], "%Y-%m-%d_%H:%M:%S" ) )
 
 
-legd_labels = [ '-00 min.', '-15 min.', '-30 min.', '-45 min.', '-60 min.', \
-		'-75 min.', '-90 min', '-105 min,', '-120 min' ]
+legd_labels = [ '-00 min.', '-60 min.', '-45 min.', '-30 min.', '-15 min.', \
+		'-120 min.', '-105 min', '-90 min,', '-75 min' ]
 
-linestyles = [ '-', '--', ':', '=.']
-markers = ['o','^',',', '.' ]
+linestyles = [ '-', '--', ':', '-.']
+markers = ['o','^',',', '.', 'x' ]
 ## Create cycler object. Use any styling from above you please
 #monochrome = (cycler('color', ['k']) * cycler('linestyle',\
 #              ['-', '--', ':', '=.']) * cycler('marker', ['o','^',',', '.']))
@@ -93,9 +94,10 @@ ax = fig.add_subplot(111)
 #ax.set_prop_cycle(monochrome)
 
 for i in [0, 4, 3, 2, 1, 8, 7, 6, 5]:
+      print i
       numofstationsplot, = ax.plot( station_date, station_num[i], \
-	      linestyle=linestyles[ i % 3 ], label=legd_labels[ i ], \
-            marker=markers[ i % 4 ], markersize=3, markerfacecolor='None', color='k' )
+	      linestyle=linestyles[ i % 4 ], label=legd_labels[ i ], \
+            marker=markers[ i % 5 ], markersize=5, markerfacecolor='None', color='k' )
 
 #box = ax.get_position()
 #ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
@@ -113,11 +115,12 @@ ax.xaxis.set_major_formatter( mdates.DateFormatter('%b %d %Hz' ))
 ax.set_xlabel( 'Time' )
 ax.set_ylabel( 'Number of USGS Stations' )
 ax.set_title( title )
-#lgd = ax.legend( bbox_to_anchor=(1, 1), loc=2, borderaxespad=0. ) 
+lgd = ax.legend( bbox_to_anchor=(1.02, 1), loc=2, borderaxespad=0. ) 
 #ax.legend(loc='center', ncol=3, bbox_to_anchor=(0.5,-0.23))
-ax.legend( loc=2 ) 
+#ax.legend( loc=2 ) 
+art=[ lgd ]
 
-canvas.print_figure(output)
+canvas.print_figure(output, additional_artists=art, bbox_inches='tight')
 
 #cleaning up
 
