@@ -9,11 +9,12 @@ cycle=`date +%H`
 
 if [ "$cycle" == "09" ]; then
    mv /gpfs/hps/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations/real_time_station_numbers.txt  /gpfs/hps/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations/real_time_station_numbers.txt.bak
+   mv /gpfs/hps/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations/checkCycle.log /gpfs/hps/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations/checkCycle.log.bak
 fi
 
 if [ ! -e "/gpfs/hps/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations" ]; then mkdir -p /gpfs/hps/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations; fi
 
 cd /gpfs/hps/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations
 
-/gpfs/hps/nwc/noscrub/Zhengtao.Cui/py_ncks_sss_copy/checkCycleUSGSStatationNumbers.py -d /gpfs/hps/nco/ops/com/nwm/prod -p $pdy -c $cycle -o /gpfs/hps/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations/real_time_station_numbers.txt > /gpfs/hps/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations/checkCycle.log 2>&1
+/gpfs/hps/nwc/noscrub/Zhengtao.Cui/py_ncks_sss_copy/checkCycleUSGSStatationNumbers.py -d /gpfs/hps/nco/ops/com/nwm/prod -p $pdy -c $cycle -o /gpfs/hps/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations/real_time_station_numbers.txt >> /gpfs/hps/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations/checkCycle.log 2>&1
 
