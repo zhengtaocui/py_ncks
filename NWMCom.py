@@ -13,12 +13,13 @@ class NWMCom:
         self.pdy = pdy 
         self.cycle = cycle
 	self.filenames = dict( [ ('short_range', [] ), \
-			         ('medium_range', [] ),\
+			         ('medium_range_mem1', [] ),\
 				 ('long_range_mem1', []), \
 				 ('long_range_mem2', []), \
 				 ('long_range_mem3', []), \
 				 ('long_range_mem4', []), \
 				 ('analysis_assim', []), \
+				 ('analysis_assim_long', []), \
 	                         ('forcing_short_range', [] ), \
 			         ('forcing_medium_range', [] ),\
 				 ('forcing_long_range_mem1', []), \
@@ -46,10 +47,10 @@ class NWMCom:
 		            self.cycle + 'z.short_range.' +\
 			    datatype + '.f' + format( i, ">03") +     \
 			    '.conus.nc' )
-	      elif caseType == "medium_range":
+	      elif caseType == "medium_range_mem1":
                   for datatype in dataTypes:
                      for i in range(3, 243, 3):
-	               self.filenames['medium_range'].append('nwm.t' + \
+	               self.filenames['medium_range_mem1'].append('nwm.t' + \
 		            self.cycle + 'z.medium_range.' +\
 			    datatype + '.f' + format( i, ">03") +     \
 			    '.conus.nc' )
@@ -59,6 +60,14 @@ class NWMCom:
                      for i in range(0, 3):
 	                self.filenames['analysis_assim'].append('nwm.t' + \
 		            self.cycle + 'z.analysis_assim.' +\
+			    datatype + '.tm' + format( i, ">02" ) + \
+			    '.conus.nc' )
+
+	      elif caseType == "analysis_assim_long":
+                  for datatype in dataTypes:
+                     for i in range(0, 11):
+	                self.filenames['analysis_assim_long'].append('nwm.t' + \
+		            self.cycle + 'z.analysis_assim_long.' +\
 			    datatype + '.tm' + format( i, ">02" ) + \
 			    '.conus.nc' )
 
@@ -401,7 +410,7 @@ class NWMCom:
 			      '.f{0:03d}.conus.nc'.format( tmorf )
 	      else:
 
-	         if case == 'analysis_assim':
+		 if case[:14] == 'analysis_assim':
 		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
 				      case + '.' + type + \
@@ -441,7 +450,7 @@ class NWMCom:
 			      '.f{0:03d}.conus.nc'.format( tmorf )
 	      else:
 
-	         if case == 'analysis_assim':
+		 if case[:14] == 'analysis_assim':
 		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
 				      case + '.' + type + \
