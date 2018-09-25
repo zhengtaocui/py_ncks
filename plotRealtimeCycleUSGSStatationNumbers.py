@@ -62,14 +62,14 @@ title = pgmopt[2]
 station_date = []
 station_num = []
 
-for i in range(0, 9):
+for i in range(0, 10):
 	station_num.append( [] )
 
 infile = open( input, 'r' )
 
 for line in infile:
    values = line.split()
-   for i in range( 0, 9 ): 
+   for i in range( 0, 10 ): 
       try:
               station_num[ i ].append( values[ i + 1 ] )
       except:
@@ -79,7 +79,7 @@ for line in infile:
 
 
 legd_labels = [ '-00 min.', '-60 min.', '-45 min.', '-30 min.', '-15 min.', \
-		'-120 min.', '-105 min', '-90 min,', '-75 min' ]
+		'-120 min.', '-105 min', '-90 min,', '-75 min', '-240 min' ]
 
 linestyles = [ '-', '--', ':', '-.']
 markers = ['o','^',',', '.', 'x' ]
@@ -93,7 +93,7 @@ canvas = FigureCanvas(fig)
 ax = fig.add_subplot(111)
 #ax.set_prop_cycle(monochrome)
 
-for i in [0, 4, 3, 2, 1, 8, 7, 6, 5]:
+for i in [0, 4, 3, 2, 1, 8, 7, 6, 5, 9]:
       print i
       numofstationsplot, = ax.plot( station_date, station_num[i], \
 	      linestyle=linestyles[ i % 4 ], label=legd_labels[ i ], \
