@@ -67,21 +67,27 @@ output = pgmopt[3]
 numofstationsintimeslices = []
 numofstationsintimeslices_m1 = []
 numofstationsintimeslices_m2 = []
+numofstationsintimeslices_m6 = []
 
 pdy_m1 = ( dt - timedelta( hours = 1) ).strftime( "%Y%m%d" )
 cycle_m1 =  ( dt - timedelta( hours = 1) ).strftime( "%H" )
 pdy_m2 = ( dt - timedelta( hours = 2) ).strftime( "%Y%m%d" )
 cycle_m2 =  ( dt - timedelta( hours = 2) ).strftime( "%H" )
+pdy_m4 = ( dt - timedelta( hours = 4) ).strftime( "%Y%m%d" )
+cycle_m4 =  ( dt - timedelta( hours = 4) ).strftime( "%H" )
 
 com = OneDayNWMCom( comdir, pdy )
 numofstationsintimeslices = com.getUSGSTimeSlicesNumOfStationsByCycle( cycle )
 
 com_m1 = OneDayNWMCom( comdir, pdy_m1 )
 com_m2 = OneDayNWMCom( comdir, pdy_m2 )
+com_m4 = OneDayNWMCom( comdir, pdy_m4 )
 numofstationsintimeslices_m1 = \
 		com_m1.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m1) )
 numofstationsintimeslices_m2 = \
 		com_m2.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m2) )
+numofstationsintimeslices_m4 = \
+		com_m2.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m4) )
 
 print output
 print len( numofstationsintimeslices )
@@ -97,6 +103,11 @@ if numofstationsintimeslices:
    for s in numofstationsintimeslices_m2:
 	   outf.write('\t')
 	   outf.write( str(s[1]) )
+   outf.write('\t')
+   if numofstationsintimeslices_m4:
+           outf.write( str( numofstationsintimeslices_m4[0][1]) )
+   else:
+	   outf.write( "0" )
    outf.write('\n')
 else:
    outf.write( pdy[:4]+'-'+ pdy[4:6] +'-'+pdy[6:8] \
