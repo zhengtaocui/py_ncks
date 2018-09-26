@@ -106,6 +106,7 @@ class OneDayNWMCom:
       def getForecastStreamFlowByFeatureID( self, case, feaID, cycle ):
 	  flows = []
           for com in self.oneDayCom:
+             print com.cycle, cycle
              if com.cycle == format( cycle, ">02d" ):
               flows = com.getForecastStreamFlowByFeatureID( case, feaID )
 	      break

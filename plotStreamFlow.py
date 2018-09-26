@@ -240,7 +240,16 @@ if ana_extend is not None:
 		  feaid, int( c[8:]) ) )
 
         print fcstFlowAAExtendt00z
-sys.exit(0)
+
+print "Get Long Analysis Forecast ... "
+if ana_long is not None:
+	for c in ana_long:
+            srCom = OneDayNWMCom( comdir, c[:8] ) 
+            fcstFlowAALongt00z.append( \
+	       srCom.getForecastStreamFlowByFeatureID( 'analysis_assim_long', \
+		  feaid, int( c[8:]) ) )
+
+        print fcstFlowAALongt00z
 
 print "Get Short Range Forecast ... "
 if sr is not None:
@@ -252,13 +261,57 @@ if sr is not None:
 #        print "fcstFlowSRt00z: ", fcstFlowSRt00z
 
 print "Get Medium Range Forecast ... "
-if mr is not None:
-	for c in mr:
+if mr1 is not None:
+	for c in mr1:
+          print c
           mrCom = OneDayNWMCom( comdir, c[:8] ) 
-          fcstFlowMRt00z.append( \
-	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range', \
+          fcstFlowMR1t00z.append( \
+	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem1', \
 		  feaid, int( c[8:]) ) )
 
+if mr2 is not None:
+	for c in mr2:
+          mrCom = OneDayNWMCom( comdir, c[:8] ) 
+          fcstFlowMR2t00z.append( \
+	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem2', \
+		  feaid, int( c[8:]) ) )
+
+if mr3 is not None:
+	for c in mr3:
+          mrCom = OneDayNWMCom( comdir, c[:8] ) 
+          fcstFlowMR3t00z.append( \
+	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem3', \
+		  feaid, int( c[8:]) ) )
+
+if mr4 is not None:
+	for c in mr4:
+          mrCom = OneDayNWMCom( comdir, c[:8] ) 
+          fcstFlowMR4t00z.append( \
+	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem4', \
+		  feaid, int( c[8:]) ) )
+
+if mr5 is not None:
+	for c in mr5:
+          mrCom = OneDayNWMCom( comdir, c[:8] ) 
+          fcstFlowMR5t00z.append( \
+	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem5', \
+		  feaid, int( c[8:]) ) )
+
+if mr6 is not None:
+	for c in mr6:
+          mrCom = OneDayNWMCom( comdir, c[:8] ) 
+          fcstFlowMR6t00z.append( \
+	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem6', \
+		  feaid, int( c[8:]) ) )
+
+if mr7 is not None:
+	for c in mr7:
+          mrCom = OneDayNWMCom( comdir, c[:8] ) 
+          fcstFlowMR7t00z.append( \
+	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem7', \
+		  feaid, int( c[8:]) ) )
+
+print  fcstFlowMR1t00z,  fcstFlowMR2t00z
 print "Get Long Range Mem1 Forecast ... "
 if lr1 is not None:
 	for c in lr1:
@@ -320,6 +373,7 @@ flow_date = []
 flow_value = []
 
 for f in flow:
+   print f
    flow_value.append( f[1] )
    flow_date.append( datetime.strptime( f[0], "%Y-%m-%d_%H:%M:%S" ) )
 
@@ -353,8 +407,20 @@ ax = fig.add_subplot(111)
 if ana is not None:
 	for f, c in  zip( fcstFlowAAt00z, ana ):
           dischargeplot, = ax.plot( [i[0] for i in f], [i[1] for i in f], \
-			  linestyle='.', \
+			  linestyle='-', \
 	  marker=None, color='k', label='AnA ' + c )
+
+if ana_extend is not None:
+	for f, c in  zip( fcstFlowAAExtendt00z, ana_extend ):
+          dischargeplot, = ax.plot( [i[0] for i in f], [i[1] for i in f], \
+			  linestyle='-', \
+	  marker=None, color='k', label='AnAEx ' + c )
+
+if ana_long is not None:
+	for f, c in  zip( fcstFlowAALongt00z, ana_long ):
+          dischargeplot, = ax.plot( [i[0] for i in f], [i[1] for i in f], \
+			  linestyle='-', \
+	  marker=None, color='k', label='AnALong ' + c )
 
 if sr is not None:
 	for f, c in  zip( fcstFlowSRt00z, sr ):
@@ -362,12 +428,54 @@ if sr is not None:
 			  linestyle='--', \
 	  marker=None, color='k', label='SR ' + c )
 
-if mr is not None:
-	for f, c in  zip( fcstFlowMRt00z, sr ):
+if mr1 is not None:
+	for f, c in  zip( fcstFlowMR1t00z, mr1 ):
           dischargeplot, = ax.plot( [i[0] for i in f], \
 		          [i[1] for i in f], \
 			  linestyle='-.', \
-	  marker=None, color='k', label='MR ' + c)
+	  marker=None, color='k', label='MR1 ' + c)
+
+if mr2 is not None:
+	for f, c in  zip( fcstFlowMR2t00z, mr2 ):
+          dischargeplot, = ax.plot( [i[0] for i in f], \
+		          [i[1] for i in f], \
+			  linestyle='-.', \
+	  marker=None, color='k', label='MR2 ' + c)
+
+if mr3 is not None:
+	for f, c in  zip( fcstFlowMR3t00z, mr3 ):
+          dischargeplot, = ax.plot( [i[0] for i in f], \
+		          [i[1] for i in f], \
+			  linestyle='-.', \
+	  marker=None, color='k', label='MR3 ' + c)
+
+if mr4 is not None:
+	for f, c in  zip( fcstFlowMR4t00z, mr4 ):
+          dischargeplot, = ax.plot( [i[0] for i in f], \
+		          [i[1] for i in f], \
+			  linestyle='-.', \
+	  marker=None, color='k', label='MR4 ' + c)
+
+if mr5 is not None:
+	for f, c in  zip( fcstFlowMR5t00z, mr5 ):
+          dischargeplot, = ax.plot( [i[0] for i in f], \
+		          [i[1] for i in f], \
+			  linestyle='-.', \
+	  marker=None, color='k', label='MR5 ' + c)
+
+if mr6 is not None:
+	for f, c in  zip( fcstFlowMR6t00z, mr6 ):
+          dischargeplot, = ax.plot( [i[0] for i in f], \
+		          [i[1] for i in f], \
+			  linestyle='-.', \
+	  marker=None, color='k', label='MR6 ' + c)
+
+if mr7 is not None:
+	for f, c in  zip( fcstFlowMR7t00z, mr7 ):
+          dischargeplot, = ax.plot( [i[0] for i in f], \
+		          [i[1] for i in f], \
+			  linestyle='-.', \
+	  marker=None, color='k', label='MR7 ' + c)
 
 if lr1 is not None:
 	for f, c in  zip( fcstFlowLR1t00z, lr1 ):

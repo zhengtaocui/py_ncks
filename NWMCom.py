@@ -501,7 +501,7 @@ class NWMCom:
                      fn = self.dir + '/nwm.' + self.pdy + \
 				     '/' + case + '/'+  \
 				   'nwm.t' + self.cycle + 'z.' + \
-                      'long_range.channel_rt_' + case[-1] + \
+                      'medium_range.channel_rt_' + case[-1] + \
 		      '.f{0:03d}.conus.nc'.format( f )
 
 		     timeofrec = dt + timedelta( hours = f )
@@ -521,6 +521,7 @@ class NWMCom:
 
 		     timeofrec = dt + timedelta( hours = f )
 
+                  print fn
 		  if os.path.exists( fn ) and os.path.isfile( fn ) :
                      prod = WRFHydroModelProduct( fn )
 	   	     flow = prod.getStreamFlowByFeatureID( feaID )
