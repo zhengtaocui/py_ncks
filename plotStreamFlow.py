@@ -1,5 +1,3 @@
-#! /usr/bin/python
-
 import os, sys, time, urllib, getopt, copy
 import gzip, shutil, re
 import netCDF4     
@@ -22,41 +20,54 @@ def main(argv):
    startday = ''
    endday = ''
    usgsSta = ''
-   rutlnk =  "/gpfs/hps/nwc/noscrub/Zhengtao.Cui/nwm_parm.v1.2/1.2/domain/RouteLink_NHDPLUS.nc" 
+   #rutlnk =  "/gpfs/hps3/nwc/noscrub/Zhengtao.Cui/nwm_parm.v1.2/1.2/domain/RouteLink_NHDPLUS.nc" 
+   rutlnk =  "/gpfs/hps3/nwc/noscrub/Zhengtao.Cui/nwm_parm.v2.0/domain/RouteLink_NHDPLUS.nc"
    tm0=None
    tm1=None
    tm2=None
    anapdycyc = None
    srpdycyc = None
-   mrpdycyc = None
+   mr1pdycyc = None
+   mr2pdycyc = None
+   mr3pdycyc = None
+   mr4pdycyc = None
+   mr5pdycyc = None
+   mr6pdycyc = None
+   mr7pdycyc = None
    lr1pdycyc = None
    lr2pdycyc = None
    lr3pdycyc = None
    lr4pdycyc = None
+   ana_long  = None
+   ana_extend = None
+   ana_hawaii = None
+   sr_hawaii  = None
    title = None
    output=None
    try:
 	   opts, args = getopt.getopt(argv,"hd:s:e:u:r:o:",\
 		      ["dir=", "startday=", "endday=", "usgsid=", "rutlnk=",\
-		      "tm0=", "tm1=", "tm2=","ana=", "sr=", "mr=", "lr1=", \
-		      "lr2=", "lr3=", "lr4=", \
+		      "tm0=", "tm1=", "tm2=","ana=", "sr=", "mr1=", "mr2=", \
+		      "mr3=", "mr4=", "mr5=", "mr6=", "mr7=", "lr1=", \
+		      "lr2=", "lr3=", "lr4=", "ana_long=", "ana_extend=",\
+		      "ana_hawaii=", "sr_hawaii=", \
 		      "title=", "output="])
    except getopt.GetoptError:
       print \
-        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --title <title>'
+        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr1 <pdycyc>  --mr2 <pdycyc>  --mr3 <pdycyc>  --mr4 <pdycyc>  --mr5 <pdycyc>  --mr6 <pdycyc>  --mr7 <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --ana_long <pdycyc> --ana_extend <pdycyc> --ana_hawaii <pdycyc> --sr_hawaii <pdycyc> --title <title> --output <output>'
 
       sys.exit(2)
 
    if not opts:
       print \
-        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --title <title>'
+        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr1 <pdycyc>  --mr2 <pdycyc>  --mr3 <pdycyc>  --mr4 <pdycyc>  --mr5 <pdycyc>  --mr6 <pdycyc>  --mr7 <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --ana_long <pdycyc> --ana_extend <pdycyc> --ana_hawaii <pdycyc> --sr_hawaii <pdycyc> --title <title> --output <output>'
       sys.exit(2)
 
    for opt, arg in opts:
       print opt, arg
       if opt == '-h':
          print  \
-        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --title <title>'
+        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr1 <pdycyc>  --mr2 <pdycyc>  --mr3 <pdycyc>  --mr4 <pdycyc>  --mr5 <pdycyc>  --mr6 <pdycyc>  --mr7 <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --ana_long <pdycyc> --ana_extend <pdycyc> --ana_hawaii <pdycyc> --sr_hawaii <pdycyc> --title <title> --output <output>'
          sys.exit()
       elif opt in ('-d', "--dir"):
          comdir = arg
@@ -91,8 +102,20 @@ def main(argv):
          anapdycyc=arg.split(',')
       elif opt in ("--sr" ):
          srpdycyc=arg.split(',')
-      elif opt in ("--mr" ):
-         mrpdycyc=arg.split(',')
+      elif opt in ("--mr1" ):
+         mr1pdycyc=arg.split(',')
+      elif opt in ("--mr2" ):
+         mr2pdycyc=arg.split(',')
+      elif opt in ("--mr3" ):
+         mr3pdycyc=arg.split(',')
+      elif opt in ("--mr4" ):
+         mr4pdycyc=arg.split(',')
+      elif opt in ("--mr5" ):
+         mr5pdycyc=arg.split(',')
+      elif opt in ("--mr6" ):
+         mr6pdycyc=arg.split(',')
+      elif opt in ("--mr7" ):
+         mr7pdycyc=arg.split(',')
       elif opt in ("--lr1" ):
          lr1pdycyc=arg.split(',')
       elif opt in ("--lr2" ):
@@ -101,6 +124,14 @@ def main(argv):
          lr3pdycyc=arg.split(',')
       elif opt in ("--lr4" ):
          lr4pdycyc=arg.split(',')
+      elif opt in ("--ana_long" ):
+         ana_long=arg.split(',')
+      elif opt in ("--ana_extend" ):
+         ana_extend=arg.split(',')
+      elif opt in ("--ana_hawaii" ):
+         ana_hawaii=arg.split(',')
+      elif opt in ("--sr_hawaii" ):
+         sr_hawaii=arg.split(',')
       elif opt in ("--title" ):
          title=arg
       elif opt in ('-o', "--output" ):
@@ -110,8 +141,11 @@ def main(argv):
 #   print 'pdy is "', pdy, '"'
 #   print 'cyc is "', cycle, '"'
    return (comdir, startday, endday, usgsSta, rutlnk, tm0, tm1, tm2, anapdycyc,\
-		   srpdycyc, mrpdycyc,\
-		   lr1pdycyc, lr2pdycyc, lr3pdycyc, lr4pdycyc, title, output )
+		   srpdycyc, mr1pdycyc, mr2pdycyc, mr3pdycyc, mr4pdycyc, \
+		   mr5pdycyc, mr6pdycyc, mr7pdycyc,\
+		   lr1pdycyc, lr2pdycyc, lr3pdycyc, lr4pdycyc, \
+		   ana_long, ana_extend, ana_hawaii, sr_hawaii, \
+		   title, output )
 
 
 if __name__ == "__main__":
@@ -127,13 +161,23 @@ tm1 = pgmopt[6]
 tm2 = pgmopt[7]
 ana = pgmopt[8]
 sr = pgmopt[9]
-mr = pgmopt[10]
-lr1 = pgmopt[11]
-lr2 = pgmopt[12]
-lr3 = pgmopt[13]
-lr4 = pgmopt[14]
-xtitle = pgmopt[15]
-outfile = pgmopt[16]
+mr1 = pgmopt[10]
+mr2 = pgmopt[11]
+mr3 = pgmopt[12]
+mr4 = pgmopt[13]
+mr5 = pgmopt[14]
+mr6 = pgmopt[15]
+mr7 = pgmopt[16]
+lr1 = pgmopt[17]
+lr2 = pgmopt[18]
+lr3 = pgmopt[19]
+lr4 = pgmopt[20]
+ana_long = pgmopt[21]
+ana_extend = pgmopt[22]
+ana_hawaii = pgmopt[23]
+sr_hawaii = pgmopt[24]
+xtitle = pgmopt[25]
+outfile = pgmopt[26]
 
 timeslices = []
 oneday = timedelta( days = 1)
@@ -148,7 +192,17 @@ fcstFlowLR1t00z = []
 fcstFlowLR2t00z = []
 fcstFlowLR3t00z = []
 fcstFlowLR4t00z = []
-fcstFlowMRt00z = []
+fcstFlowMR1t00z = []
+fcstFlowMR2t00z = []
+fcstFlowMR3t00z = []
+fcstFlowMR4t00z = []
+fcstFlowMR5t00z = []
+fcstFlowMR6t00z = []
+fcstFlowMR7t00z = []
+fcstFlowAALongt00z = []
+fcstFlowAAExtendt00z = []
+fcstFlowAAHawaiit00z = []
+fcstFlowSRHawaiit00z = []
 
 dateiter = startpdy
 
@@ -164,13 +218,29 @@ feaid = OneDayNWMCom.getForecastPointByUSGSStation( rutlnk, usgsSta )
 print "feaid = ", feaid
 
 startCom = OneDayNWMCom( comdir, startpdy.strftime(  "%Y%m%d" ) )
+
+
+
 print "Get Analysis Forecast ... "
 if ana is not None:
 	for c in ana:
-            srCom = OneDayNWMCom( comdir, ana[:8] ) 
+            srCom = OneDayNWMCom( comdir, c[:8] ) 
             fcstFlowAAt00z.append( \
 	       srCom.getForecastStreamFlowByFeatureID( 'analysis_assim', \
-		  feaid, int( ana[8:]) ) )
+		  feaid, int( c[8:]) ) )
+
+        print fcstFlowAAt00z
+
+print "Get Extended Analysis Forecast ... "
+if ana_extend is not None:
+	for c in ana_extend:
+            srCom = OneDayNWMCom( comdir, c[:8] ) 
+            fcstFlowAAExtendt00z.append( \
+	       srCom.getForecastStreamFlowByFeatureID( 'analysis_assim_extend', \
+		  feaid, int( c[8:]) ) )
+
+        print fcstFlowAAExtendt00z
+sys.exit(0)
 
 print "Get Short Range Forecast ... "
 if sr is not None:

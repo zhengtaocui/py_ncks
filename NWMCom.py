@@ -13,13 +13,22 @@ class NWMCom:
         self.pdy = pdy 
         self.cycle = cycle
 	self.filenames = dict( [ ('short_range', [] ), \
+			         ('short_range_hawaii', [] ),\
 			         ('medium_range_mem1', [] ),\
+			         ('medium_range_mem2', [] ),\
+			         ('medium_range_mem3', [] ),\
+			         ('medium_range_mem4', [] ),\
+			         ('medium_range_mem5', [] ),\
+			         ('medium_range_mem6', [] ),\
+			         ('medium_range_mem7', [] ),\
 				 ('long_range_mem1', []), \
 				 ('long_range_mem2', []), \
 				 ('long_range_mem3', []), \
 				 ('long_range_mem4', []), \
 				 ('analysis_assim', []), \
 				 ('analysis_assim_long', []), \
+				 ('analysis_assim_extend', []), \
+				 ('analysis_assim_hawaii', []), \
 	                         ('forcing_short_range', [] ), \
 			         ('forcing_medium_range', [] ),\
 				 ('forcing_long_range_mem1', []), \
@@ -31,7 +40,13 @@ class NWMCom:
 				 ('forcing_long_range_mem3_thin', []), \
 				 ('forcing_long_range_mem4_thin', []), \
 				 ('forcing_analysis_assim', []), \
+				 ('forcing_analysis_assim_extend', []), \
+				 ('forcing_analysis_assim_hawaii', []), \
+				 ('forcing_short_range_hawaii', []), \
 				 ('restart', []),            \
+				 ('restart_extend', []),            \
+				 ('restart_hawaii', []),            \
+				 ('restart_long', []),            \
 				 ('usgs_timeslices', []) ] )
 
 	for k in self.filenames.keys():
@@ -47,12 +62,26 @@ class NWMCom:
 		            self.cycle + 'z.short_range.' +\
 			    datatype + '.f' + format( i, ">03") +     \
 			    '.conus.nc' )
-	      elif caseType == "medium_range_mem1":
+	      elif caseType == "short_range_hawaii":
+                  for datatype in dataTypes:
+                     for i in range(1, 60):
+	               self.filenames['short_range'].append('nwm.t' + \
+		            self.cycle + 'z.short_range.' +\
+			    datatype + '.f' + format( i, ">03") +     \
+			    '.hawaii.nc' )
+	      elif caseType == "medium_range_mem1" or \
+	           caseType == "medium_range_mem2" or \
+	           caseType == "medium_range_mem3" or \
+	           caseType == "medium_range_mem4" or \
+	           caseType == "medium_range_mem5" or \
+	           caseType == "medium_range_mem6" or \
+	           caseType == "medium_range_mem7" :
                   for datatype in dataTypes:
                      for i in range(3, 243, 3):
-	               self.filenames['medium_range_mem1'].append('nwm.t' + \
+	               self.filenames[caseType].append('nwm.t' + \
 		            self.cycle + 'z.medium_range.' +\
-			    datatype + '.f' + format( i, ">03") +     \
+			    datatype +  '_' + caseType[16:] + \
+			    '.f' + format( i, ">03") +     \
 			    '.conus.nc' )
 
 	      elif caseType == "analysis_assim":
@@ -63,13 +92,29 @@ class NWMCom:
 			    datatype + '.tm' + format( i, ">02" ) + \
 			    '.conus.nc' )
 
+	      elif caseType == "analysis_assim_extend":
+                  for datatype in dataTypes:
+                     for i in range(0, 28):
+	                self.filenames['analysis_assim_extend'].append('nwm.t' + \
+		            self.cycle + 'z.analysis_assim_extend.' +\
+			    datatype + '.tm' + format( i, ">02" ) + \
+			    '.conus.nc' )
+
 	      elif caseType == "analysis_assim_long":
                   for datatype in dataTypes:
-                     for i in range(0, 11):
+                     for i in range(0, 12):
 	                self.filenames['analysis_assim_long'].append('nwm.t' + \
 		            self.cycle + 'z.analysis_assim_long.' +\
 			    datatype + '.tm' + format( i, ">02" ) + \
 			    '.conus.nc' )
+
+	      elif caseType == "analysis_assim_hawaii":
+                  for datatype in dataTypes:
+                     for i in range(0, 3):
+	                self.filenames['analysis_assim_extend'].append('nwm.t' + \
+		            self.cycle + 'z.analysis_assim.' +\
+			    datatype + '.tm' + format( i, ">02" ) + \
+			    '.hawaii.nc' )
 
               elif caseType == "long_range_mem1" or \
  	           caseType == "long_range_mem2" or \
@@ -94,6 +139,24 @@ class NWMCom:
 	                self.filenames['forcing_analysis_assim'].append('nwm.t' + \
 		            self.cycle + 'z.analysis_assim.forcing.tm' + \
 			    format( i, ">02" ) + '.conus.nc' )
+
+	      elif caseType == "forcing_analysis_assim_extend":
+                     for i in range(0, 28):
+	                self.filenames['forcing_analysis_assim_extend'].append('nwm.t' + \
+		            self.cycle + 'z.analysis_assim_extend.forcing.tm' + \
+			    format( i, ">02" ) + '.conus.nc' )
+
+	      elif caseType == "forcing_analysis_assim_hawaii":
+                     for i in range(0, 3):
+	                self.filenames['forcing_analysis_assim_hawaii'].append('nwm.t' + \
+		            self.cycle + 'z.analysis_assim.forcing.tm' + \
+			    format( i, ">02" ) + '.hawaii.nc' )
+
+	      elif caseType == "forcing_short_range_hawaii":
+                     for i in range(0, 61):
+	                self.filenames['forcing_short_range_hawaii'].append('nwm.t' + \
+		            self.cycle + 'z.short_range.forcing.tm' + \
+			    format( i, ">02" ) + '.hawaii.nc' )
 
 	      elif caseType == "forcing_short_range":
                   for i in range(1, 18):
@@ -140,18 +203,21 @@ class NWMCom:
 		     ( dt +  d ).strftime( "%Y-%m-%d_%H:%M:00." ) + \
 		     '15min.usgsTimeSlice.ncdf' )
 
-	      elif caseType == "restart" :
+	      elif caseType == "restart" or \
+                   caseType == "restart_extend" or \
+                   caseType == "restart_long" or \
+		   caseType == "restart_hawaii" :
                  dt = datetime.strptime( self.pdy+self.cycle, "%Y%m%d%H" )
-                 self.filenames[ 'restart' ].append( 'nwm.rst.' + \
+                 self.filenames[ caseType ].append( 'nwm.rst.' + \
 				     self.cycle + '/RESTART.' + \
                            self.pdy + self.cycle + '_DOMAIN1')
 
-                 self.filenames[ 'restart' ].append( 'nwm.rst.' +   \
+                 self.filenames[ caseType ].append( 'nwm.rst.' +   \
 				     self.cycle + '/HYDRO_RST.' +       \
 				     dt.strftime( "%Y-%m-%d_%H:00" ) \
                            + '_DOMAIN1' )
 
-                 self.filenames[ 'restart' ].append( 'nwm.rst.' +   \
+                 self.filenames[ caseType ].append( 'nwm.rst.' +   \
 				self.cycle +                        \
 				'/nudgingLastObs.' +                \
 				dt.strftime( "%Y-%m-%d_%H:%M:00" )  \
@@ -312,7 +378,10 @@ class NWMCom:
       def getStreamFlowByFeatureID( self, case, feaID, tmorf=0 ):
 	      time_flow = None
               dt = datetime.strptime( self.pdy+self.cycle, "%Y%m%d%H" )
-	      if case == 'analysis_assim':
+	      if case == 'analysis_assim' or \
+	         case == 'analysis_assim_extend' or \
+	         case == 'analysis_assim_long' or \
+		 case == 'analysis_assim_hawaii' :
 		      dt -= timedelta( hours = tmorf )
 	      else:
 		      dt += timedelta( hours = tmorf )
@@ -321,7 +390,7 @@ class NWMCom:
                    fn = self.dir + '/nwm.' + self.pdy + \
 				   '/' + case + '/'+ f
 		   if re.match( \
-		      r'nwm.t[0-9][0-9]z\..*\.channel_rt\.(tm{0:02d}|f{0:03d})\.conus.nc'.format( tmorf ), f ):
+		      r'nwm.t[0-9][0-9]z\..*\.channel_rt(_[0-9])?\.(tm{0:02d}|f{0:03d})\.(conus|hawaii).nc'.format( tmorf ), f ):
 		     if os.path.exists( fn ) and os.path.isfile( fn ) :
 
                         prod = WRFHydroModelProduct( fn )
@@ -339,11 +408,33 @@ class NWMCom:
 		      start = 2 
 		      step = -1
 		      end = -1 
+	      elif case == 'analysis_assim_extend':
+		      start = 27 
+		      step = -1
+		      end = -1 
+	      elif case == 'analysis_assim_long':
+		      start = 11 
+		      step = -1
+		      end = -1 
+	      elif case == 'analysis_assim_hawaii':
+		      start = 2
+		      step = -1
+		      end = -1 
 	      elif case == 'short_range':
 		      start = 0 
 		      step = 1
                       end = 19
-	      elif case == 'medium_range':
+	      elif case == 'short_range_hawaii':
+		      start = 0 
+		      step = 1
+                      end = 61
+	      elif case == 'medium_range_mem1' or \
+                   case ==  'medium_range_mem2'	or \
+                   case ==  'medium_range_mem3'	or \
+                   case ==  'medium_range_mem4'	or \
+                   case ==  'medium_range_mem5'	or \
+                   case ==  'medium_range_mem6'	or \
+                   case ==  'medium_range_mem7'	:
 		      start = 0 
 		      step = 3
 		      end = 240
@@ -366,6 +457,27 @@ class NWMCom:
                       'analysis_assim.channel_rt.tm{0:02d}.conus.nc'.format( f )
 
 		     timeofrec = dt - timedelta( hours = f )
+	          elif case == 'analysis_assim_extend':
+                     fn = self.dir + '/nwm.' + self.pdy + \
+				     '/' + case + '/'+  \
+				   'nwm.t' + self.cycle + 'z.' + \
+                      'analysis_assim_extend.channel_rt.tm{0:02d}.conus.nc'.format( f )
+
+		     timeofrec = dt - timedelta( hours = f )
+	          elif case == 'analysis_assim_long':
+                     fn = self.dir + '/nwm.' + self.pdy + \
+				     '/' + case + '/'+  \
+				   'nwm.t' + self.cycle + 'z.' + \
+                      'analysis_assim_long.channel_rt.tm{0:02d}.conus.nc'.format( f )
+
+		     timeofrec = dt - timedelta( hours = f )
+	          elif case == 'analysis_assim_hawaii':
+                     fn = self.dir + '/nwm.' + self.pdy + \
+				     '/' + case + '/'+  \
+				   'nwm.t' + self.cycle + 'z.' + \
+                      'analysis_assim.channel_rt.tm{0:02d}.hawaii.nc'.format( f )
+
+		     timeofrec = dt - timedelta( hours = f )
                   elif case == 'long_range_mem1' or \
                        case == 'long_range_mem2' or \
                        case == 'long_range_mem3' or \
@@ -378,6 +490,29 @@ class NWMCom:
 
 		     timeofrec = dt + timedelta( hours = f )
 
+	          elif case == 'medium_range_mem1' or \
+                       case ==  'medium_range_mem2'	or \
+                       case ==  'medium_range_mem3'	or \
+                       case ==  'medium_range_mem4'	or \
+                       case ==  'medium_range_mem5'	or \
+                       case ==  'medium_range_mem6'	or \
+                       case ==  'medium_range_mem7'	:
+
+                     fn = self.dir + '/nwm.' + self.pdy + \
+				     '/' + case + '/'+  \
+				   'nwm.t' + self.cycle + 'z.' + \
+                      'long_range.channel_rt_' + case[-1] + \
+		      '.f{0:03d}.conus.nc'.format( f )
+
+		     timeofrec = dt + timedelta( hours = f )
+
+	          elif case == 'short_range_hawaii':
+                     fn = self.dir + '/nwm.' + self.pdy + \
+				     '/' + case + '/'+  \
+				   'nwm.t' + self.cycle + 'z.' + \
+                      'short_range.channel_rt.f{0:03d}.hawaii.nc'.format( f )
+
+		     timeofrec = dt + timedelta( hours = f )
 	          else:
                      fn = self.dir + '/nwm.' + self.pdy + \
 				     '/' + case + '/'+  \
@@ -389,37 +524,61 @@ class NWMCom:
 		  if os.path.exists( fn ) and os.path.isfile( fn ) :
                      prod = WRFHydroModelProduct( fn )
 	   	     flow = prod.getStreamFlowByFeatureID( feaID )
+                     print "flow:", flow
 		     if flow: 
 		        time_flow.append( (timeofrec, flow ) )
 		     prod.close()
+              print time_flow
               return time_flow
 
       def getVariable( self, case, type, var, tmorf=0 ):
 	      values = None
+	      domain = 'conus'
+	      if case[-6:] == 'hawaii':
+		      domain = 'hawaii'
 
 	      if case[:8] == 'forcing_':
-	         if case == 'forcing_analysis_assim':
+	         if case == 'forcing_analysis_assim' or\
+	            case == 'forcing_analysis_assim_extend' or\
+	            case == 'forcing_analysis_assim_hawaii' :
 			 fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
-				     case[:8] + '.' + type + \
-			      '.tm{0:02d}.conus.nc'.format( tmorf )
+				     case[8:] + '.' + type + \
+			      '.tm{0:02d}.' + domain + '.nc'.format( tmorf )
 	         else:
 		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
 				     case[8:] + '.' + type + \
-			      '.f{0:03d}.conus.nc'.format( tmorf )
+			      '.f{0:03d}.' + domain + '.nc'.format( tmorf )
 	      else:
 
 		 if case[:14] == 'analysis_assim':
 		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
 				      case + '.' + type + \
-			      '.tm{0:02d}.conus.nc'.format( tmorf )
+			      '.tm{0:02d}.' + domain + '.nc'.format( tmorf )
+	         elif case == 'medium_range_mem1' or \
+                      case ==  'medium_range_mem2'	or \
+                      case ==  'medium_range_mem3'	or \
+                      case ==  'medium_range_mem4'	or \
+                      case ==  'medium_range_mem5'	or \
+                      case ==  'medium_range_mem6'	or \
+                      case ==  'medium_range_mem7'	or \
+                      case ==  'long_range_mem1'	or \
+                      case ==  'long_range_mem2'	or \
+                      case ==  'long_range_mem3'	or \
+		      case ==  'long_range_mem4' :
+
+		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+				     '/nwm.t' + self.cycle + 'z.' + \
+				     case + '.' + type + '_' + case[-1] + \
+			      '.f{0:03d}.' + domain + '.nc'.format( tmorf )
+
 	         else:
 		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
-				      case + '.' + type + \
-			      '.f{0:03d}.conus.nc'.format( tmorf )
+				     case + '.' + type + \
+			      '.f{0:03d}.' + domain + '.nc'.format( tmorf )
 
 	      if os.path.exists( fn ) and os.path.isfile( fn ) :
 
@@ -437,29 +596,52 @@ class NWMCom:
 
       def getWRFHydroProd( self, case, type, var, tmorf=0 ):
 	      prod = None
+	      domain = 'conus'
+	      if case[-6:] == 'hawaii':
+		      domain = 'hawaii'
+
 	      if case[:8] == 'forcing_':
-	         if case == 'forcing_analysis_assim':
+	         if case == 'forcing_analysis_assim' or\
+	            case == 'forcing_analysis_assim_extend' or\
+	            case == 'forcing_analysis_assim_hawaii' :
 			 fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
-				     case[:8] + '.' + type + \
-			      '.tm{0:02d}.conus.nc'.format( tmorf )
+				     case[8:] + '.' + type + \
+			      '.tm{0:02d}.' + domain + '.nc'.format( tmorf )
 	         else:
 		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
 				     case[8:] + '.' + type + \
-			      '.f{0:03d}.conus.nc'.format( tmorf )
+			      '.f{0:03d}.' + domain + '.nc'.format( tmorf )
 	      else:
 
 		 if case[:14] == 'analysis_assim':
 		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
 				      case + '.' + type + \
-			      '.tm{0:02d}.conus.nc'.format( tmorf )
+			      '.tm{0:02d}.' + domain + '.nc'.format( tmorf )
+	         elif case == 'medium_range_mem1' or \
+                      case ==  'medium_range_mem2'	or \
+                      case ==  'medium_range_mem3'	or \
+                      case ==  'medium_range_mem4'	or \
+                      case ==  'medium_range_mem5'	or \
+                      case ==  'medium_range_mem6'	or \
+                      case ==  'medium_range_mem7'	or \
+                      case ==  'long_range_mem1'	or \
+                      case ==  'long_range_mem2'	or \
+                      case ==  'long_range_mem3'	or \
+		      case ==  'long_range_mem4' :
+
+		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+				     '/nwm.t' + self.cycle + 'z.' + \
+				     case + '.' + type + '_' + case[-1] + \
+			      '.f{0:03d}.' + domain + '.nc'.format( tmorf )
+
 	         else:
 		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
-				      case + '.' + type + \
-			      '.f{0:03d}.conus.nc'.format( tmorf )
+				     case + '.' + type + \
+			      '.f{0:03d}.' + domain + '.nc'.format( tmorf )
 
 	      if os.path.exists( fn ) and os.path.isfile( fn ) :
 

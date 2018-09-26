@@ -73,11 +73,11 @@ class WRFHydroModelProduct:
                 or re.match( r'nudgingLastObs\..*\.nc', self.prodId ): 
 		      return 'restart'
 	      elif re.match( \
-		      r'.*\/nwm.t[0-9]{2}z\..*\.(tm0[0-2]|f[0-9]{3})\.conus\.nc',\
+		      r'.*\/nwm.t[0-9]{2}z\..*\.(tm[0-9]{2}|f[0-9]{3})\.(conus|hawaii)\.nc',\
 			      self.prodId ):
 
 		      m = re.match( \
-		       r'.*\/nwm.t[0-9]{2}z\.(.*)\.(.*)\.(tm0[0-2]|f[0-9]{3})\.conus\.nc', self.prodId )
+		       r'.*\/nwm.t[0-9]{2}z\.(.*)\.(.*)\.(tm[0-9]{2}|f[0-9]{3})\.(conus|hawaii)\.nc', self.prodId )
 		      return m.group(2)
 
               else:
@@ -114,7 +114,8 @@ class WRFHydroModelProduct:
 	      return None
 
       def getStreamFlowByFeatureID(self, feaID ):
-#	      print "type = ",  self.getProductType()[0:10]
+	      print "type = ",  self.getProductType()[0:10]
+	      print "product:", self.prodId
 	      if 'channel_rt' != self.getProductType()[0:10] :
 		      raise RuntimeError( "Product is not a channel_rt: " + \
 				  self.prodId )
@@ -126,6 +127,7 @@ class WRFHydroModelProduct:
 #              print flow
 	      idx = index( self.nc_fid.variables[ "feature_id" ], feaID )
 
+              print flow[idx]
               return flow[idx] 
 
       def close(self):
