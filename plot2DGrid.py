@@ -18,6 +18,21 @@ from matplotlib.ticker import FuncFormatter
 
 from OneDayNWMCom import *
 
+def frange(start, stop, step):
+     i = start
+     while i < stop:
+         yield i
+         i += step
+
+def seq(start, stop, step=1):
+    n = int(round((stop - start)/float(step)))
+    if n > 1:
+        return([start + step*i for i in range(n+1)])
+    elif n == 1:
+        return([start])
+    else:
+        return([])
+
 def main(argv):
    """
      function to get input arguments
@@ -28,12 +43,16 @@ def main(argv):
    type = None
    var = None
    tmorf = None
+   start = None
+   stop = None
+   step = None
    title = None
-   output=None
+   output="NWM_grid"
    try:
 	   opts, args = getopt.getopt(argv,"hd:p:c:t:v:f:",\
 		      ["dir=", "pdycyc=", \
 		      "case=", "type=", "var=", "tmorf=", \
+		      "start==", "stop=", "step=", \
 		      "title=", "output="])
    except getopt.GetoptError:
       print \
@@ -68,6 +87,12 @@ def main(argv):
          var=arg
       elif opt in ('-f', "--tmorf" ):
          tmorf=arg
+      elif opt in ("--start" ):
+         start=arg
+      elif opt in ("--stop" ):
+         stop=arg
+      elif opt in ("--step" ):
+         step=arg
       elif opt in ("--title" ):
          title=arg
       elif opt in ('-o', "--output" ):
@@ -76,7 +101,7 @@ def main(argv):
 #   print 'com dir is "', comdir, '"'
 #   print 'pdy is "', pdy, '"'
 #   print 'cyc is "', cycle, '"'
-   return (comdir, pdycyc, case, type, var, tmorf, title, output )
+   return (comdir, pdycyc, case, type, var, tmorf, start, stop, step, title, output )
 
 
 if __name__ == "__main__":
@@ -89,10 +114,13 @@ case = pgmopt[2]
 type = pgmopt[3]
 var = pgmopt[4]
 tmorf = pgmopt[5]
-xtitle = pgmopt[6]
-outfile = pgmopt[7]
+start = pgmopt[6]
+stop = pgmopt[7]
+step = pgmopt[8]
+xtitle = pgmopt[9]
+outfile = pgmopt[10]
 
-print comdir, pdy, cycle, case, type, var, tmorf, xtitle, outfile
+print comdir, pdy, cycle, case, type, var, tmorf, start, stop, step, xtitle, outfile
 
 varValues = []
 
@@ -113,13 +141,21 @@ atts_units = com.getComCycle( cycle ).getWRFHydroProd( \
 		      var, 'units' )
 print atts_units
 
+atts_longname = com.getComCycle( cycle ).getWRFHydroProd( \
+		      case, type, var, int( tmorf ) ).getVariableAttributes( \
+		      var, 'long_name' )
+
 fig = plt.figure( figsize=(8,8))
 ax = fig.add_axes([0.1,0.1,0.8,0.8])
+
+if xtitle:
+   #fig.suptitle( xtitle )
+   ax.set_title( xtitle )
 
 width = x[-1] - x[ 0 ] + ( x[1] - x[0] )
 height = y[-1] - y[ 0 ] + ( y[1] - y[0] )
 m = Basemap( projection='lcc', rsphere=(6370000,6370000), \
-		resolution='l', area_thresh=1000., \
+		resolution='c', area_thresh=10000., \
 		lat_1=30., lat_2=60., lat_0=40., lon_0=-97, \
 		width=width, height=height )
 m.drawcoastlines()
@@ -142,13 +178,18 @@ print X, Y
 
 print x.shape[0]
 print y.shape[0]
-cs = m.contourf( X, Y, varValues[0], 20, cmap=cm.s3pcpn )
+#print seq(0.0, 0.035, 0.001)
+
+if start and stop and step:
+   cs = m.contourf( X, Y, varValues[0], levels=seq(start, stop, step), cmap=cm.s3pcpn )
+else:
+   cs = m.contourf( X, Y, varValues[0], 20, cmap=cm.s3pcpn )
 #cs = m.pcolormesh(X,Y,np.squeeze( varValues[0] ), cmap=cm.s3pcpn)
 
 cbar = m.colorbar(cs, location='bottom', pad="10%")
-cbar.set_label( atts_units )
+cbar.set_label( atts_longname + '(' + atts_units + ')' )
 
-fig.savefig('NWM_grid.pdf', bbox_inches='tight')
+fig.savefig(outfile + '.pdf', bbox_inches='tight')
 
 
 #cleaning up
