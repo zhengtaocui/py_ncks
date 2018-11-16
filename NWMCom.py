@@ -542,22 +542,22 @@ class NWMCom:
 	         if case == 'forcing_analysis_assim' or\
 	            case == 'forcing_analysis_assim_extend' or\
 	            case == 'forcing_analysis_assim_hawaii' :
-			 fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+			 fn = (self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
 				     case[8:] + '.' + type + \
-			      '.tm{0:02d}.' + domain + '.nc'.format( tmorf )
+			      '.tm{0:02d}.' + domain + '.nc').format( tmorf )
 	         else:
-		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+		      fn = (self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
 				     case[8:] + '.' + type + \
-			      '.f{0:03d}.' + domain + '.nc'.format( tmorf )
+			      '.f{0:03d}.' + domain + '.nc').format( tmorf )
 	      else:
 
 		 if case[:14] == 'analysis_assim':
-		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+		      fn = (self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
 				      case + '.' + type + \
-			      '.tm{0:02d}.' + domain + '.nc'.format( tmorf )
+			      '.tm{0:02d}.' + domain + '.nc').format( tmorf )
 	         elif case == 'medium_range_mem1' or \
                       case ==  'medium_range_mem2'	or \
                       case ==  'medium_range_mem3'	or \
@@ -570,16 +570,16 @@ class NWMCom:
                       case ==  'long_range_mem3'	or \
 		      case ==  'long_range_mem4' :
 
-		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+		      fn = (self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
-				     case + '.' + type + '_' + case[-1] + \
-			      '.f{0:03d}.' + domain + '.nc'.format( tmorf )
+				     case[:-5] + '.' + type + '_' + case[-1] + \
+			      '.f{0:03d}.' + domain + '.nc').format( tmorf )
 
 	         else:
-		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+		      fn = (self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
 				     case + '.' + type + \
-			      '.f{0:03d}.' + domain + '.nc'.format( tmorf )
+			      '.f{0:03d}.' + domain + '.nc').format( tmorf )
 
 	      if os.path.exists( fn ) and os.path.isfile( fn ) :
 
@@ -605,22 +605,22 @@ class NWMCom:
 	         if case == 'forcing_analysis_assim' or\
 	            case == 'forcing_analysis_assim_extend' or\
 	            case == 'forcing_analysis_assim_hawaii' :
-			 fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+			 fn = (self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
 				     case[8:] + '.' + type + \
-			      '.tm{0:02d}.' + domain + '.nc'.format( tmorf )
+			      '.tm{0:02d}.' + domain + '.nc').format( tmorf )
 	         else:
-		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+		      fn = (self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
 				     case[8:] + '.' + type + \
-			      '.f{0:03d}.' + domain + '.nc'.format( tmorf )
+			      '.f{0:03d}.' + domain + '.nc').format( tmorf )
 	      else:
 
 		 if case[:14] == 'analysis_assim':
-		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+		      fn = (self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
 				      case + '.' + type + \
-			      '.tm{0:02d}.' + domain + '.nc'.format( tmorf )
+			      '.tm{0:02d}.' + domain + '.nc').format( tmorf )
 	         elif case == 'medium_range_mem1' or \
                       case ==  'medium_range_mem2'	or \
                       case ==  'medium_range_mem3'	or \
@@ -633,16 +633,16 @@ class NWMCom:
                       case ==  'long_range_mem3'	or \
 		      case ==  'long_range_mem4' :
 
-		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+		      fn = (self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
-				     case + '.' + type + '_' + case[-1] + \
-			      '.f{0:03d}.' + domain + '.nc'.format( tmorf )
+				     case[:-5] + '.' + type + '_' + case[-1] + \
+			      '.f{0:03d}.' + domain + '.nc').format( tmorf )
 
 	         else:
-		      fn = self.dir + '/nwm.' + self.pdy + '/' + case +\
+		      fn = (self.dir + '/nwm.' + self.pdy + '/' + case +\
 				     '/nwm.t' + self.cycle + 'z.' + \
 				     case + '.' + type + \
-			      '.f{0:03d}.' + domain + '.nc'.format( tmorf )
+			      '.f{0:03d}.' + domain + '.nc').format( tmorf )
 
 	      if os.path.exists( fn ) and os.path.isfile( fn ) :
 
