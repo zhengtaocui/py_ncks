@@ -131,11 +131,11 @@ varValues = com.getVariable( case, type, cycle, var,  int( tmorf ) )
 x = com.getVariable( case, type, cycle, 'x',  int( tmorf ) )
 y = com.getVariable( case, type, cycle, 'y',  int( tmorf ) )
 
-minValue = max( map( max, varValues ) )
-minValue = min( map( min, varValues ) )
+maxValue = max( map( max, varValues[0] ) )
+minValue = min( map( min, varValues[0] ) )
 
-print "Max value: ", max( map( max, varValues ) )
-print "Min value: ", min( map( min, varValues ) )
+print "Max value: ", max( map( max, varValues[0] ) )
+print "Min value: ", min( map( min, varValues[0] ) )
 print x[0], x[-1]
 print y[0], y[-1]
 print x,y
