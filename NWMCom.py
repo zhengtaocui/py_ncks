@@ -375,6 +375,32 @@ class NWMCom:
 		      prod.close()
               return flows
 
+      def getUSGSStationRealTimeAllTimeStationStreamFlowQuality( self ):
+	      time_sta_flow_qual = {} 
+              for f in self.filenames[ 'usgs_timeslices' ]:
+                   fn = self.dir + '/nwm.' + self.pdy + \
+				   '/usgs_timeslices/'+ f
+		   nextday = datetime.strptime( self.pdy, "%Y%m%d" ) + \
+				   timedelta(days=1)
+
+                   nextdayfn = self.dir + '/nwm.' + \
+				   nextday.strftime( "%Y%m%d" ) + \
+				   '/usgs_timeslices/'+ f
+
+		   if os.path.exists( nextdayfn ) and \
+				   os.path.isfile( nextdayfn ) :
+                        fn = nextdayfn
+
+		   print fn
+		   if os.path.exists( fn ) and os.path.isfile( fn ) :
+
+                      prod = WRFHydroModelProduct( fn )
+		      centerTime = prod.getUSGSStationRealTimeCenterTime()
+		      time_sta_flow_qual[ centerTime ] = \
+			  prod.getUSGSStationRealTimeAllStationStreamFlowQuality()
+		      prod.close()
+              return time_sta_flow_qual
+
       def getStreamFlowByFeatureID( self, case, feaID, tmorf=0 ):
 	      time_flow = None
               dt = datetime.strptime( self.pdy+self.cycle, "%Y%m%d%H" )

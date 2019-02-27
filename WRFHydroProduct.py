@@ -113,6 +113,67 @@ class WRFHydroModelProduct:
            else:
 	      return None
 
+      def getUSGSStationRealTimeStreamFlowQuality(self, stationId ):
+	   if 'usgs_timeslices' != self.getProductType() :
+             raise RuntimeError( "Product is not a USGS timeslices "+\
+				  self.prodId )
+           flow = None
+           dis_qual = None
+	   for sta, dis, qual in zip( \
+		   self.nc_fid.variables[ 'stationId' ],\
+		   self.nc_fid.variables[ 'discharge' ], \
+		   self.nc_fid.variables[ 'discharge_quality' ] ):
+	       station = netCDF4.chartostring( \
+			       np.asarray( sta ) ).tostring()
+	       if station.strip() == stationId:
+                  flow = np.asarray( dis )
+		  dis_qual = np.asarray( qual )
+                  print ("found station: ", self.prodId, station, flow.item(0),\
+				     dis_qual.item(0) )
+		  break
+#	   print self.nc_fid.getncattr( 'sliceCenterTimeUTC' )
+           print flow, dis_qual
+	   if flow and dis_qual:
+	      return (self.nc_fid.getncattr( 'sliceCenterTimeUTC' ), \
+	                     flow.item(0), dis_qual.item(0) )
+           else:
+	      return (self.nc_fid.getncattr( 'sliceCenterTimeUTC' ), \
+	              None, None )
+
+      def getUSGSStationRealTimeAllStationStreamFlowQuality(self ):
+	   if 'usgs_timeslices' != self.getProductType() :
+             raise RuntimeError( "Product is not a USGS timeslices "+\
+				  self.prodId )
+           sta_flow_qual = {}
+           flow = None
+           dis_qual = None
+	   for sta, dis, qual in zip( \
+		   self.nc_fid.variables[ 'stationId' ],\
+		   self.nc_fid.variables[ 'discharge' ], \
+		   self.nc_fid.variables[ 'discharge_quality' ] ):
+	       station = netCDF4.chartostring( \
+			       np.asarray( sta ) ).tostring().strip( ' \t\n\r')
+               flow = np.asarray( dis )
+	       dis_qual = np.asarray( qual )
+
+	       if flow is None:
+		       print "flow is None: ", station
+	       if dis_qual is None:
+		       print "dis_qual is None: ", station
+	       if ( flow is not None ) and ( dis_qual is not None ):
+		       sta_flow_qual[ station ] = ( flow.item(0), dis_qual.item(0) )
+               else:
+		       sta_flow_qual[ station ] = ( None, None )
+
+#	   print self.nc_fid.getncattr( 'sliceCenterTimeUTC' )
+	   return sta_flow_qual
+
+      def getUSGSStationRealTimeCenterTime(self ):
+	   if 'usgs_timeslices' != self.getProductType() :
+             raise RuntimeError( "Product is not a USGS timeslices "+\
+				  self.prodId )
+	   return self.nc_fid.getncattr( 'sliceCenterTimeUTC' )
+
       def getStreamFlowByFeatureID(self, feaID ):
 	      print "type = ",  self.getProductType()[0:10]
 	      print "product:", self.prodId

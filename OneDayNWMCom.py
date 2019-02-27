@@ -45,6 +45,26 @@ class OneDayNWMCom:
 		  com.getUSGSStationRealTimeStreamFlow(stationId)
           return flows
 
+      def getUSGSStationRealTimeAllTimeStationStreamFlowQuality( self, cycle=None ):
+	  all_time_sta_flow_qual = {} 
+	  print "cycle = ", cycle
+	  if cycle is not None:
+            for com in self.oneDayCom:
+               if com.cycle == format( cycle, ">02d" ):
+	          time_sta_flow_qual = \
+		      com.getUSGSStationRealTimeAllTimeStationStreamFlowQuality()
+                  for k in time_sta_flow_qual.keys():
+		     all_time_sta_flow_qual[ k ] = time_sta_flow_qual[ k ]
+                  break
+	  else:
+            for com in self.oneDayCom:
+	       time_sta_flow_qual = \
+		    com.getUSGSStationRealTimeAllTimeStationStreamFlowQuality()
+               for k in time_sta_flow_qual.keys():
+	   	    all_time_sta_flow_qual[ k ] = time_sta_flow_qual[ k ]
+
+          return all_time_sta_flow_qual
+
       def getForecastPoint( self,  wrfhydr_chn_pts, latlon):
 	      chn_pts = netCDF4.Dataset( wrfhydr_chn_pts, "r" )
 
