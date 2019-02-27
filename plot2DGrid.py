@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/python
 
 import os, sys, time, urllib, getopt, copy
 import gzip, shutil, re
