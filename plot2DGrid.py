@@ -131,7 +131,11 @@ varValues = com.getVariable( case, type, cycle, var,  int( tmorf ) )
 x = com.getVariable( case, type, cycle, 'x',  int( tmorf ) )
 y = com.getVariable( case, type, cycle, 'y',  int( tmorf ) )
 
-print varValues[ 0 ]
+minValue = max( map( max, varValues ) )
+minValue = min( map( min, varValues ) )
+
+print "Max value: ", max( map( max, varValues ) )
+print "Min value: ", min( map( min, varValues ) )
 print x[0], x[-1]
 print y[0], y[-1]
 print x,y
@@ -187,7 +191,8 @@ else:
 #cs = m.pcolormesh(X,Y,np.squeeze( varValues[0] ), cmap=cm.s3pcpn)
 
 cbar = m.colorbar(cs, location='bottom', pad="10%")
-cbar.set_label( atts_longname + '(' + atts_units + ')' )
+cbar.set_label( atts_longname + '(' + atts_units + ')' + ' : Max=' + str( maxValue) + ' : Min=' \
+		+ str(minValue) )
 
 fig.savefig(outfile + '.pdf', bbox_inches='tight')
 
