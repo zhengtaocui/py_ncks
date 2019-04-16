@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PYTHONPATH=/usrx/local/prod/python-modules/gnu/netCDF4-1.2.2/lib64/python2.6/site-packages:/usrx/local/prod/python-modules/gnu/ordereddict-1.1/lib64/python2.6/site-packages:/usrx/local/prod/python-modules/gnu/numpy-1.10.2/lib64/python2.6/site-packages:/gpfs/hps/nwc/save/Zhengtao.Cui/python_local/ordereddict/lib64/python2.6/site-packages:/gpfs/hps/nwc/save/Zhengtao.Cui/python_local/numpy/lib64/python2.6/site-packages:/gpfs/sss/nwc/shared/Zhengtao.Cui/python_local/lib64/python2.6/site-packages
+
 #./plot2DGrid.py --dir=/gpfs/hps/nco/ops/com/nwm/prod --pdycyc=2019022623 --case=forcing_short_range --type=forcing --var=T2D --tmorf=2 --start=270 --stop=320 --step=5 --title="20190226 23z f002" --output="NWM_grid"
 #
 #convert -density 300 NWM_grid.pdf T2D_SR_Forcing_20190226_23zf002.jpg
@@ -40,14 +42,51 @@
 #
 #convert -density 300 NWM_grid.pdf T2D_SR_Forcing_20190226_22zf003_zt.jpg
 
-./plot2DGrid.py --dir=/gpfs/hps3/ptmp/Zhengtao.Cui/debug/com/nwm/test --pdycyc=2019022700 --case=forcing_analysis_assim --type=forcing --var=T2D --tmorf=0 --start=270 --stop=320 --step=5 --title="20190227 00z tm00" --output="NWM_grid"
+#./plot2DGrid.py --dir=/gpfs/hps3/ptmp/Zhengtao.Cui/debug/com/nwm/test --pdycyc=2019022700 --case=forcing_analysis_assim --type=forcing --var=T2D --tmorf=0 --start=270 --stop=320 --step=5 --title="20190227 00z tm00" --output="NWM_grid"
+#
+#convert -density 300 NWM_grid.pdf T2D_AnA_Forcing_20190227_00ztm00_zt_debug.jpg
 
-convert -density 300 NWM_grid.pdf T2D_AnA_Forcing_20190227_00ztm00_zt_debug.jpg
+#./plot2DGrid.py --dir=/gpfs/hps3/ptmp/Zhengtao.Cui/com/nwm/test --pdycyc=2019022623 --case=forcing_short_range --type=forcing --var=T2D --tmorf=1 --start=270 --stop=320 --step=5 --title="20190226 23z f001" --output="NWM_grid"
 
-./plot2DGrid.py --dir=/gpfs/hps3/ptmp/Zhengtao.Cui/com/nwm/test --pdycyc=2019022623 --case=forcing_short_range --type=forcing --var=T2D --tmorf=1 --start=270 --stop=320 --step=5 --title="20190226 23z f001" --output="NWM_grid"
+#convert -density 300 NWM_grid.pdf T2D_SR_Forcing_20190226_23zf001_zt_debug.jpg
 
-convert -density 300 NWM_grid.pdf T2D_SR_Forcing_20190226_23zf001_zt_debug.jpg
+#./plot2DGrid.py --dir=/gpfs/hps3/ptmp/Zhengtao.Cui/com/nwm/test --pdycyc=2019022622 --case=forcing_short_range --type=forcing --var=T2D --tmorf=2 --start=270 --stop=320 --step=5 --title="20190226 22z f002" --output="NWM_grid"
 
-./plot2DGrid.py --dir=/gpfs/hps3/ptmp/Zhengtao.Cui/com/nwm/test --pdycyc=2019022622 --case=forcing_short_range --type=forcing --var=T2D --tmorf=2 --start=270 --stop=320 --step=5 --title="20190226 22z f002" --output="NWM_grid"
+#convert -density 300 NWM_grid.pdf T2D_SR_Forcing_20190226_22zf002_zt_debug.jpg
 
-convert -density 300 NWM_grid.pdf T2D_SR_Forcing_20190226_22zf002_zt_debug.jpg
+#./plot2DGrid.py --dir=/gpfs/hps3/ptmp/Zhengtao.Cui/nwmv2_1_root/com/nwm/test --pdycyc=2019022700 --case=forcing_analysis_assim --type=forcing --var=T2D --tmorf=0 --start=270 --stop=320 --step=5 --title="20190227 00z tm00 (AnA before fix)" --output="NWM_grid"
+
+#convert -density 300 NWM_grid.pdf T2D_AnA_Forcing_20190227_00ztm00_zt_debug_beforefix.jpg
+
+#./plot2DGrid.py --dir=/gpfs/hps3/ptmp/Zhengtao.Cui/nwmv2_1_root/com/nwm/test --pdycyc=2019022800 --case=forcing_analysis_assim --type=forcing --var=T2D --tmorf=0 --start=270 --stop=320 --step=5 --title="20190228 00z tm00 (AnA after fix)" --output="NWM_grid"
+
+#convert -density 300 NWM_grid.pdf T2D_AnA_Forcing_20190227_00ztm00_zt_debug_afterfix.jpg
+
+#./plot2DGrid.py --dir=/gpfs/hps3/ptmp/Zhengtao.Cui/nwmv2_1_root/com/nwm/test --pdycyc=2019022623 --case=forcing_short_range --type=forcing --var=T2D --tmorf=1 --start=270 --stop=320 --step=5 --title="20190226 23z f001(SR before fix)" --output="NWM_grid"
+
+#convert -density 300 NWM_grid.pdf T2D_SR_Forcing_20190226_23zf001_zt_debug_beforefix.jpg
+
+#./plot2DGrid.py --dir=/gpfs/hps3/ptmp/Zhengtao.Cui/nwmv2_1_root/com/nwm/test --pdycyc=2019022723 --case=forcing_short_range --type=forcing --var=T2D --tmorf=1 --start=270 --stop=320 --step=5 --title="20190227 23z f001(SR after fix)" --output="NWM_grid"
+
+#convert -density 300 NWM_grid.pdf T2D_SR_Forcing_20190226_23zf001_zt_debug_afterfix.jpg
+
+./plot2DGrid.py --dir=/gpfs/hps3/ptmp/Zhengtao.Cui/nwmv2_1_root_debug/com/nwm/test --pdycyc=2019030101 --case=forcing_analysis_assim --type=forcing --var=T2D --tmorf=0 --start=270 --stop=320 --step=5 --title="20190301 01z tm00 (AnA before fix)" --output="NWM_grid"
+
+cp NWM_grid.pdf T2D_AnA_Forcing_20190301_01ztm00_zt_debug_manualrun.pdf
+
+convert -density 300 NWM_grid.pdf T2D_AnA_Forcing_20190301_01ztm00_zt_debug_manualrun.jpg
+
+./plot2DGrid.py --dir=/gpfs/hps3/ptmp/Zhengtao.Cui/nwmv2_1_root_debug/com/nwm/test --pdycyc=2019030100 --case=forcing_analysis_assim --type=forcing --var=T2D --tmorf=0 --start=270 --stop=320 --step=5 --title="20190301 00z tm00 (AnA after fix)" --output="NWM_grid"
+
+cp NWM_grid.pdf T2D_AnA_Forcing_20190301_00ztm00_zt_debug_manualrun.pdf
+convert -density 300 NWM_grid.pdf T2D_AnA_Forcing_20190301_00ztm00_zt_debug_manualrun.jpg
+
+./plot2DGrid.py --dir=/gpfs/hps3/ptmp/Zhengtao.Cui/nwmv2_1_root_debug/com/nwm/test --pdycyc=2019022823 --case=forcing_short_range --type=forcing --var=T2D --tmorf=1 --start=270 --stop=320 --step=5 --title="20190228 23z f001(SR before fix)" --output="NWM_grid"
+
+cp NWM_grid.pdf T2D_SR_Forcing_20190228_23zf001_zt_debug_manualrun.jpg
+convert -density 300 NWM_grid.pdf T2D_SR_Forcing_20190228_23zf001_zt_debug_manualrun.jpg
+
+./plot2DGrid.py --dir=/gpfs/hps3/ptmp/Zhengtao.Cui/nwmv2_1_root_debug/com/nwm/test --pdycyc=2019030100 --case=forcing_short_range --type=forcing --var=T2D --tmorf=1 --start=270 --stop=320 --step=5 --title="20190301 00z f001(SR before fix)" --output="NWM_grid"
+
+cp NWM_grid.pdf T2D_SR_Forcing_20190301_00zf001_zt_debug_manualrun.jpg
+convert -density 300 NWM_grid.pdf T2D_SR_Forcing_20190301_00zf001_zt_debug_manualrun.jpg

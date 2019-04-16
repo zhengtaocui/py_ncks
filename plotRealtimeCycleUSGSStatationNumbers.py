@@ -1,8 +1,8 @@
-#! /usr/bin/python
+#!/usr/bin/env python
 
 import os, sys, time, urllib, getopt, copy
 import gzip, shutil, re
-import netCDF4     
+#import netCDF4     
 import numpy as np 
 from string import *
 import matplotlib.dates as mdates
@@ -71,7 +71,7 @@ for line in infile:
    values = line.split()
    for i in range( 0, 10 ): 
       try:
-              station_num[ i ].append( values[ i + 1 ] )
+              station_num[ i ].append( int( values[ i + 1 ] ) )
       except:
 	      print "Error: ", line
 	      station_num[ i ].append( 0 )
@@ -92,27 +92,37 @@ canvas = FigureCanvas(fig)
 
 ax = fig.add_subplot(111)
 #ax.set_prop_cycle(monochrome)
+ax.xaxis.set_major_formatter( mdates.DateFormatter('%b %d' ))
+ax.xaxis.set_minor_formatter( mdates.DateFormatter('%Hz' ))
+
+#fig.autofmt_xdate()
 
 for i in [0, 4, 3, 2, 1, 8, 7, 6, 5, 9]:
       print i
-      numofstationsplot, = ax.plot( station_date, station_num[i], \
+      numofstationsplot, = ax.plot_date( station_date, station_num[i], \
 	      linestyle=linestyles[ i % 4 ], label=legd_labels[ i ], \
             marker=markers[ i % 5 ], markersize=5, markerfacecolor='None', color='k' )
 
 #box = ax.get_position()
 #ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 
-ax.xaxis.set_major_locator( mdates.HourLocator() )
-ax.xaxis.set_minor_locator( mdates.HourLocator() )
+ax.xaxis.set_major_locator( mdates.DayLocator() )
+ax.xaxis.set_minor_locator( mdates.HourLocator( interval=2) )
+
+ax.tick_params(axis='x', rotation=90)
+
+#ax.yaxis.set_major_locator( MultipleLocator(20) )
 
 ax.set_xlim( station_date[0] - timedelta( hours=1), \
 		station_date[-1] + timedelta( hours = 1 ) )
-fig.autofmt_xdate()
 
-ax.grid( True )
-ax.xaxis.set_major_formatter( mdates.DateFormatter('%b %d %Hz' ))
+#ax.set_ylim(0, 1000)
 
-ax.set_xlabel( 'Time' )
+
+ax.grid( True, "minor", "x" )
+ax.grid( True, "major", "y" )
+
+ax.set_xlabel( 'Cycle' )
 ax.set_ylabel( 'Number of USGS Stations' )
 ax.set_title( title )
 lgd = ax.legend( bbox_to_anchor=(1.02, 1), loc=2, borderaxespad=0. ) 

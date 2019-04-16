@@ -149,6 +149,8 @@ atts_longname = com.getComCycle( cycle ).getWRFHydroProd( \
 		      case, type, var, int( tmorf ) ).getVariableAttributes( \
 		      var, 'long_name' )
 
+print atts_longname
+
 fig = plt.figure( figsize=(8,8))
 ax = fig.add_axes([0.1,0.1,0.8,0.8])
 
