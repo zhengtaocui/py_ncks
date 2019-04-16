@@ -22,4 +22,4 @@ mv NumberOfUSGSStations.pdf NumberOfUSGSStations_prod.pdf
 #mv NumberOfUSGSStations.pdf NumberOfUSGSStations_para.pdf
 
 #mail -s "USGS Number of Stations versus Time" -a ./NumberOfUSGSStations_prod.pdf -a NumberOfUSGSStations_para.pdf -r 'Zhengtao.Cui@noaa.gov' Zhengtao.Cui@noaa.gov <<< 'V1.0: NumberOfUSGSStations_prod.pdf\\n V1.1: NumberOfUSGSStations_para.pdf'
-echo -e "V1.1: NumberOfUSGSStations_prod.pdf\n" | mail -s "USGS Number of Stations versus Time" -a ./NumberOfUSGSStations_prod.pdf -r 'Zhengtao.Cui@noaa.gov' Zhengtao.Cui@noaa.gov,brian.cosgrove@noaa.gov,jamesmcc@ucar.edu,gochis@ucar.edu 
+#echo -e "V1.1: NumberOfUSGSStations_prod.pdf\n" | mail -s "USGS Number of Stations versus Time" -a ./NumberOfUSGSStations_prod.pdf -r 'Zhengtao.Cui@noaa.gov' Zhengtao.Cui@noaa.gov,brian.cosgrove@noaa.gov,jamesmcc@ucar.edu,gochis@ucar.edu 
