@@ -12,4 +12,6 @@ cd /gpfs/hps3/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations
 
 /gpfs/hps3/nwc/noscrub/Zhengtao.Cui/py_ncks_sss_copy/plotRealtimeCycleUSGSStatationNumbers.py -i /gpfs/hps3/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations/real_time_station_numbers.txt -o CycleNumberOfUSGSStations.pdf -t "USGS number of stations by cycle" > /gpfs/hps3/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations/plot.log 2>&1
 
+scp ./CycleNumberOfUSGSStations.pdf surge:/gpfs/hps3/nwc/save/Zhengtao.Cui/Real_time_USGS_Number_of_Stations/CycleNumberOfUSGSStations_$(date +"%Y_%m_%d").pdf
+
 echo -e "USGS number of stations as seen by model at each cycle." | mail -s "Real-time USGS Number of Stations versus cycle" -a ./CycleNumberOfUSGSStations.pdf -r 'Zhengtao.Cui@noaa.gov' Zhengtao.Cui@noaa.gov,brian.cosgrove@noaa.gov,jamesmcc@ucar.edu,gochis@ucar.edu 

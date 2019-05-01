@@ -67,7 +67,7 @@ output = pgmopt[3]
 numofstationsintimeslices = []
 numofstationsintimeslices_m1 = []
 numofstationsintimeslices_m2 = []
-numofstationsintimeslices_m6 = []
+numofstationsintimeslices_m4 = []
 
 pdy_m1 = ( dt - timedelta( hours = 1) ).strftime( "%Y%m%d" )
 cycle_m1 =  ( dt - timedelta( hours = 1) ).strftime( "%H" )
@@ -87,7 +87,7 @@ numofstationsintimeslices_m1 = \
 numofstationsintimeslices_m2 = \
 		com_m2.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m2) )
 numofstationsintimeslices_m4 = \
-		com_m2.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m4) )
+		com_m4.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m4) )
 
 print output
 print len( numofstationsintimeslices )
