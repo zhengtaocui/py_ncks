@@ -339,13 +339,15 @@ class NWMCom:
 				   os.path.isfile( nextdayfn ) :
                         fn = nextdayfn
 
-		   #print fn
 		   if os.path.exists( fn ) and os.path.isfile( fn ) :
-
+		      print("Found timeslice file: " + fn  )
                       prod = WRFHydroModelProduct( fn )
 		      numofstations.append( \
 				      prod.getNumberOfUSGSStations() )
 		      prod.close()
+                   else:
+		      print("No timeslice file: " + fn  )
+
               return numofstations
 
       def getUSGSStationRealTimeStreamFlow( self, stationId ):

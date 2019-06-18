@@ -97,21 +97,31 @@ if numofstationsintimeslices:
    outf.write( numofstationsintimeslices[0][0] )
    outf.write('\t')
    outf.write( str( numofstationsintimeslices[0][1] ) )
+else:
+   outf.write( pdy[:4]+'-'+ pdy[4:6] +'-'+pdy[6:8] \
+		   +'_' + format( cycle, ">02d" ) + ':00:00\t0')
+
+if numofstationsintimeslices_m1:
    for s in numofstationsintimeslices_m1:
 	   outf.write('\t')
 	   outf.write( str(s[1]) )
+else:
+   outf.write( '\t0\t0\t0\t0')
+
+if numofstationsintimeslices_m2:
    for s in numofstationsintimeslices_m2:
 	   outf.write('\t')
 	   outf.write( str(s[1]) )
-   outf.write('\t')
-   if numofstationsintimeslices_m4:
-           outf.write( str( numofstationsintimeslices_m4[0][1]) )
-   else:
-	   outf.write( "0" )
-   outf.write('\n')
 else:
-   outf.write( pdy[:4]+'-'+ pdy[4:6] +'-'+pdy[6:8] \
-		   +'_' + format( cycle, ">02d" ) + ':00:00\t0\n')
+   outf.write( '\t0\t0\t0\t0')
+
+if numofstationsintimeslices_m4:
+   outf.write('\t')
+   outf.write( str( numofstationsintimeslices_m4[0][1]) )
+else:
+   outf.write( '\t0' )
+
+outf.write('\n')
 
 outf.close()
 
