@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #module load netcdf4-python
-module load python
+module swap python/2.7.14
 
 #export PYTHONPATH=$PYTHONPATH:/gpfs/sss/nwc/shared/Zhengtao.Cui/python_local/lib64/python2.6/site-packages:/gpfs/hps3/nwc/noscrub/Zhengtao.Cui/py_ncks_sss_copy
 export PYTHONPATH=$PYTHONPATH:/gpfs/hps3/nwc/noscrub/Zhengtao.Cui/py_ncks_sss_copy

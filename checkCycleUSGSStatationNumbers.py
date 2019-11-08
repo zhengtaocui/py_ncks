@@ -26,20 +26,20 @@ def main(argv):
       opts, args = \
 	      getopt.getopt(argv,"hd:p:c:o:",["dir=", "pdy=", "cycle=", "output=" ])
    except getopt.GetoptError:
-      print \
-        'checkCycleUSGSStatationNumbers.py -d <comdir> -p <pdy> -c <cycle> -o <output>' 
+      print( \
+        'checkCycleUSGSStatationNumbers.py -d <comdir> -p <pdy> -c <cycle> -o <output>' )
       sys.exit(2)
    for opt, arg in opts:
-      print opt, arg
+      print( opt, arg )
       if opt == '-h':
-         print  \
-        'checkCycleUSGSStatationNumbers.py -d <comdir> -p <pdy> -c <cycle> -o <output>' 
+         print(  \
+        'checkCycleUSGSStatationNumbers.py -d <comdir> -p <pdy> -c <cycle> -o <output>' )
          sys.exit()
       elif opt in ('-d', "--dir"):
          comdir = arg
          if not os.path.exists( comdir ):
            if not os.path.isdir( comdir ):
-             print 'com dir ', comdir, ' does not exist!'
+             print( 'com dir ', comdir, ' does not exist!')
              sys.exit()
       elif opt in ('-p', "--pdy" ):
          pdy = arg
@@ -89,11 +89,11 @@ numofstationsintimeslices_m2 = \
 numofstationsintimeslices_m4 = \
 		com_m4.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m4) )
 
-print output
-print len( numofstationsintimeslices )
+print( output )
+print( len( numofstationsintimeslices ) )
 outf = open( output, "a+")
 if numofstationsintimeslices:
-   print numofstationsintimeslices[0][0]
+   print( numofstationsintimeslices[0][0] )
    outf.write( numofstationsintimeslices[0][0] )
    outf.write('\t')
    outf.write( str( numofstationsintimeslices[0][1] ) )
