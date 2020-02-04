@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 
 import os, sys, time, urllib, getopt, copy
 import gzip, shutil, re
@@ -7,6 +7,9 @@ import numpy as np
 from string import *
 import matplotlib as mpl
 mpl.use('Agg')
+import mpl_toolkits
+#mpl_toolkits.__path__.append("/gpfs/sss/nwc/shared/Zhengtao.Cui/python27_local/lib/python2.7/site-packages/mpl_toolkits")
+#print(mpl_toolkits.__path__)
 from mpl_toolkits.basemap import Basemap, cm
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
@@ -55,27 +58,27 @@ def main(argv):
 		      "start==", "stop=", "step=", \
 		      "title=", "output="])
    except getopt.GetoptError:
-      print \
-        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --title <title>'
+      print( \
+        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --title <title>' )
 
       sys.exit(2)
 
    if not opts:
-      print \
-        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --title <title>'
+      print( \
+        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --title <title>' )
       sys.exit(2)
 
    for opt, arg in opts:
-      print opt, arg
+      print( opt, arg )
       if opt == '-h':
-         print  \
-        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --title <title>'
+         print(  \
+        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --title <title>' )
          sys.exit()
       elif opt in ('-d', "--dir"):
          comdir = arg
          if not os.path.exists( comdir ):
            if not os.path.isdir( comdir ):
-             print 'com dir ', comdir, ' does not exist!'
+             print( 'com dir ', comdir, ' does not exist!' )
              sys.exit()
       elif opt in ('-p', "--pdycyc" ):
          pdycyc = arg
@@ -120,7 +123,7 @@ step = pgmopt[8]
 xtitle = pgmopt[9]
 outfile = pgmopt[10]
 
-print comdir, pdy, cycle, case, type, var, tmorf, start, stop, step, xtitle, outfile
+print( comdir, pdy, cycle, case, type, var, tmorf, start, stop, step, xtitle, outfile)
 
 varValues = []
 
@@ -134,22 +137,22 @@ y = com.getVariable( case, type, cycle, 'y',  int( tmorf ) )
 maxValue = max( map( max, varValues[0] ) )
 minValue = min( map( min, varValues[0] ) )
 
-print "Max value: ", max( map( max, varValues[0] ) )
-print "Min value: ", min( map( min, varValues[0] ) )
-print x[0], x[-1]
-print y[0], y[-1]
-print x,y
+print( "Max value: ", max( map( max, varValues[0] ) ) )
+print( "Min value: ", min( map( min, varValues[0] ) ) )
+print( x[0], x[-1] )
+print( y[0], y[-1] )
+print( x,y )
 
 atts_units = com.getComCycle( cycle ).getWRFHydroProd( \
 		      case, type, var, int( tmorf ) ).getVariableAttributes( \
 		      var, 'units' )
-print atts_units
+print( atts_units )
 
 atts_longname = com.getComCycle( cycle ).getWRFHydroProd( \
 		      case, type, var, int( tmorf ) ).getVariableAttributes( \
 		      var, 'long_name' )
 
-print atts_longname
+print( atts_longname )
 
 fig = plt.figure( figsize=(8,8))
 ax = fig.add_axes([0.1,0.1,0.8,0.8])
@@ -180,10 +183,10 @@ y += y0
 
 X,Y = np.meshgrid( x, y )
 
-print X, Y
+print( X, Y )
 
-print x.shape[0]
-print y.shape[0]
+print( x.shape[0] )
+print( y.shape[0] )
 #print seq(0.0, 0.035, 0.001)
 
 if start and stop and step:
