@@ -90,31 +90,6 @@ class OneDayNWMCom:
 
               chn_pts.close()
 
-      @staticmethod
-      def getForecastPointByUSGSStation( routlinknc, gsstation):
-              rutlnk = netCDF4.Dataset( routlinknc, "r" )
-              links = rutlnk.variables[ "link" ][:]
-              gages = rutlnk.variables[ "gages" ][:]
-              rutlnk.close()
-
-              sta = '{0: >15}'.format( gsstation )
-              for g, l in  zip( gages, links ):
-                     if netCDF4.chartostring( \
-                         np.asarray( g ) ).tostring() == sta:
-                              return l
-
-              return None
-
-              #gl = zip( gages, links )
-#
-#              gl.sort()
-#
-#              link_sorted = [ l for g, l in gl ]
-#              gage_sorted = [ g for g, l in gl ]
-#
-#              idx = WRFHydroProduct.index( gage_sorted, sta )
-              return link_sorted[ idx ]
-
       def getStreamFlowByFeatureID( self, case, feaID, tmorf=0 ):
           flows = []
           for com in self.oneDayCom:
@@ -137,3 +112,28 @@ class OneDayNWMCom:
 
       def getComCycle( self, cyc ):
               return self.oneDayCom[ cyc ]
+
+
+def getForecastPointByUSGSStation( routlinknc, gsstation):
+        rutlnk = netCDF4.Dataset( routlinknc, "r" )
+        links = rutlnk.variables[ "link" ][:]
+        gages = rutlnk.variables[ "gages" ][:]
+        rutlnk.close()
+
+        sta = '{0: >15}'.format( gsstation )
+        for g, l in  zip( gages, links ):
+#               print( netCDF4.chartostring(np.asarray(g)), l, sta)
+               if netCDF4.chartostring( np.asarray( g ) ) == sta:
+                        return l
+
+        return None
+
+        #gl = zip( gages, links )
+#
+#              gl.sort()
+#
+#              link_sorted = [ l for g, l in gl ]
+#              gage_sorted = [ g for g, l in gl ]
+#
+#              idx = WRFHydroProduct.index( gage_sorted, sta )
+        return link_sorted[ idx ]

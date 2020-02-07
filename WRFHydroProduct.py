@@ -99,9 +99,9 @@ class WRFHydroModelProduct:
                    self.nc_fid.variables[ 'stationId' ],\
                    self.nc_fid.variables[ 'discharge' ], \
                    self.nc_fid.variables[ 'discharge_quality' ] ):
-               station = netCDF4.chartostring( \
-                               np.asarray( sta ) ).tostring()
-               if station.strip() == stationId:
+               station = netCDF4.chartostring( sta )
+#               print(np.char.strip(station), stationId)
+               if np.char.strip(station) == stationId:
                   if np.asarray( qual ) > 0:
                      flow = np.asarray( dis )
                   print ("found station: ", self.prodId, station, flow.item(0) )
@@ -181,8 +181,8 @@ class WRFHydroModelProduct:
                       raise RuntimeError( "Product is not a channel_rt: " + \
                                   self.prodId )
               dim = self.nc_fid.dimensions[ "feature_id" ]
-#              print 'feaID = ', feaID
-#              print 'dim = ', dim
+              print( 'feaID = ', feaID )
+              print( 'dim = ', dim )
 
               flow=self.nc_fid.variables[ "streamflow" ]
 #              print flow

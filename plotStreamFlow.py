@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os, sys, time, urllib, getopt, copy
 import gzip, shutil, re
 import netCDF4     
@@ -21,7 +22,8 @@ def main(argv):
    endday = ''
    usgsSta = ''
    #rutlnk =  "/gpfs/hps3/nwc/noscrub/Zhengtao.Cui/nwm_parm.v1.2/1.2/domain/RouteLink_NHDPLUS.nc" 
-   rutlnk =  "/gpfs/hps3/nwc/noscrub/Zhengtao.Cui/nwm_parm.v2.0/domain/RouteLink_NHDPLUS.nc"
+   rutlnk =  "/gpfs/hps3/nwc/noscrub/Zhengtao.Cui/nwm_parm.v2.0_to_NCO/domain/RouteLink_NHDPLUS.nc"
+
    tm0=None
    tm1=None
    tm2=None
@@ -45,35 +47,35 @@ def main(argv):
    title = None
    output=None
    try:
-	   opts, args = getopt.getopt(argv,"hd:s:e:u:r:o:",\
-		      ["dir=", "startday=", "endday=", "usgsid=", "rutlnk=",\
-		      "tm0=", "tm1=", "tm2=","ana=", "sr=", "mr1=", "mr2=", \
-		      "mr3=", "mr4=", "mr5=", "mr6=", "mr7=", "lr1=", \
-		      "lr2=", "lr3=", "lr4=", "ana_long=", "ana_extend=",\
-		      "ana_hawaii=", "sr_hawaii=", \
-		      "title=", "output="])
+      opts, args = getopt.getopt(argv,"hd:s:e:u:r:o:",\
+              ["dir=", "startday=", "endday=", "usgsid=", "rutlnk=",\
+              "tm0=", "tm1=", "tm2=","ana=", "sr=", "mr1=", "mr2=", \
+              "mr3=", "mr4=", "mr5=", "mr6=", "mr7=", "lr1=", \
+              "lr2=", "lr3=", "lr4=", "ana_long=", "ana_extend=",\
+              "ana_hawaii=", "sr_hawaii=", \
+              "title=", "output="])
    except getopt.GetoptError:
-      print \
-        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr1 <pdycyc>  --mr2 <pdycyc>  --mr3 <pdycyc>  --mr4 <pdycyc>  --mr5 <pdycyc>  --mr6 <pdycyc>  --mr7 <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --ana_long <pdycyc> --ana_extend <pdycyc> --ana_hawaii <pdycyc> --sr_hawaii <pdycyc> --title <title> --output <output>'
+      print( \
+        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr1 <pdycyc>  --mr2 <pdycyc>  --mr3 <pdycyc>  --mr4 <pdycyc>  --mr5 <pdycyc>  --mr6 <pdycyc>  --mr7 <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --ana_long <pdycyc> --ana_extend <pdycyc> --ana_hawaii <pdycyc> --sr_hawaii <pdycyc> --title <title> --output <output>')
 
       sys.exit(2)
 
    if not opts:
-      print \
-        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr1 <pdycyc>  --mr2 <pdycyc>  --mr3 <pdycyc>  --mr4 <pdycyc>  --mr5 <pdycyc>  --mr6 <pdycyc>  --mr7 <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --ana_long <pdycyc> --ana_extend <pdycyc> --ana_hawaii <pdycyc> --sr_hawaii <pdycyc> --title <title> --output <output>'
+      print( \
+        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr1 <pdycyc>  --mr2 <pdycyc>  --mr3 <pdycyc>  --mr4 <pdycyc>  --mr5 <pdycyc>  --mr6 <pdycyc>  --mr7 <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --ana_long <pdycyc> --ana_extend <pdycyc> --ana_hawaii <pdycyc> --sr_hawaii <pdycyc> --title <title> --output <output>')
       sys.exit(2)
 
    for opt, arg in opts:
-      print opt, arg
+      print( opt, arg )
       if opt == '-h':
-         print  \
-        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr1 <pdycyc>  --mr2 <pdycyc>  --mr3 <pdycyc>  --mr4 <pdycyc>  --mr5 <pdycyc>  --mr6 <pdycyc>  --mr7 <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --ana_long <pdycyc> --ana_extend <pdycyc> --ana_hawaii <pdycyc> --sr_hawaii <pdycyc> --title <title> --output <output>'
+         print(  \
+        'plotStreamFlow.py -d <comdir> -s <startpdy> -e <endpdy> -r <rutlnk> --sr <pdycyc> --mr1 <pdycyc>  --mr2 <pdycyc>  --mr3 <pdycyc>  --mr4 <pdycyc>  --mr5 <pdycyc>  --mr6 <pdycyc>  --mr7 <pdycyc> --lr1 <pdycyc> --lr2 <pdycyc> --lr3 <pdycyc> --lr4 <pdycyc> --ana_long <pdycyc> --ana_extend <pdycyc> --ana_hawaii <pdycyc> --sr_hawaii <pdycyc> --title <title> --output <output>')
          sys.exit()
       elif opt in ('-d', "--dir"):
          comdir = arg
          if not os.path.exists( comdir ):
            if not os.path.isdir( comdir ):
-             print 'com dir ', comdir, ' does not exist!'
+             print( 'com dir ', comdir, ' does not exist!' )
              sys.exit()
       elif opt in ('-s', "--startpdy" ):
          startday = arg
@@ -141,11 +143,11 @@ def main(argv):
 #   print 'pdy is "', pdy, '"'
 #   print 'cyc is "', cycle, '"'
    return (comdir, startday, endday, usgsSta, rutlnk, tm0, tm1, tm2, anapdycyc,\
-		   srpdycyc, mr1pdycyc, mr2pdycyc, mr3pdycyc, mr4pdycyc, \
-		   mr5pdycyc, mr6pdycyc, mr7pdycyc,\
-		   lr1pdycyc, lr2pdycyc, lr3pdycyc, lr4pdycyc, \
-		   ana_long, ana_extend, ana_hawaii, sr_hawaii, \
-		   title, output )
+           srpdycyc, mr1pdycyc, mr2pdycyc, mr3pdycyc, mr4pdycyc, \
+           mr5pdycyc, mr6pdycyc, mr7pdycyc,\
+           lr1pdycyc, lr2pdycyc, lr3pdycyc, lr4pdycyc, \
+           ana_long, ana_extend, ana_hawaii, sr_hawaii, \
+           title, output )
 
 
 if __name__ == "__main__":
@@ -213,136 +215,136 @@ if tm1 is not None:
 if tm2 is not None:
   tm2dt = datetime.strptime( tm2, "%Y%m%d%H" )
 
-feaid = OneDayNWMCom.getForecastPointByUSGSStation( rutlnk, usgsSta )
+feaid = getForecastPointByUSGSStation( rutlnk, usgsSta )
 
-print "feaid = ", feaid
+print( "feaid = ", feaid )
 
 startCom = OneDayNWMCom( comdir, startpdy.strftime(  "%Y%m%d" ) )
 
 
 
-print "Get Analysis Forecast ... "
+print( "Get Analysis Forecast ... " )
 if ana is not None:
-	for c in ana:
+    for c in ana:
             srCom = OneDayNWMCom( comdir, c[:8] ) 
             fcstFlowAAt00z.append( \
-	       srCom.getForecastStreamFlowByFeatureID( 'analysis_assim', \
-		  feaid, int( c[8:]) ) )
+           srCom.getForecastStreamFlowByFeatureID( 'analysis_assim', \
+          feaid, int( c[8:]) ) )
 
-        print fcstFlowAAt00z
+    print( fcstFlowAAt00z )
 
-print "Get Extended Analysis Forecast ... "
+print( "Get Extended Analysis Forecast ... " )
 if ana_extend is not None:
-	for c in ana_extend:
+    for c in ana_extend:
             srCom = OneDayNWMCom( comdir, c[:8] ) 
-            fcstFlowAAExtendt00z.append( \
-	       srCom.getForecastStreamFlowByFeatureID( 'analysis_assim_extend', \
-		  feaid, int( c[8:]) ) )
+            fcstFlowAAExtendt00z.append(
+           srCom.getForecastStreamFlowByFeatureID( 'analysis_assim_extend',
+          feaid, int( c[8:]) ) )
 
-        print fcstFlowAAExtendt00z
+    print( fcstFlowAAExtendt00z )
 
-print "Get Long Analysis Forecast ... "
+print( "Get Long Analysis Forecast ... " )
 if ana_long is not None:
-	for c in ana_long:
+    for c in ana_long:
             srCom = OneDayNWMCom( comdir, c[:8] ) 
             fcstFlowAALongt00z.append( \
-	       srCom.getForecastStreamFlowByFeatureID( 'analysis_assim_long', \
-		  feaid, int( c[8:]) ) )
+           srCom.getForecastStreamFlowByFeatureID( 'analysis_assim_long', \
+          feaid, int( c[8:]) ) )
 
-        print fcstFlowAALongt00z
+    print( fcstFlowAALongt00z )
 
-print "Get Short Range Forecast ... "
+print( "Get Short Range Forecast ... " )
 if sr is not None:
-	for c in sr:
+    for c in sr:
             srCom = OneDayNWMCom( comdir, c[:8] ) 
             fcstFlowSRt00z.append( \
-	       srCom.getForecastStreamFlowByFeatureID( 'short_range', \
-		  feaid, int( c[8:]) ) )
+           srCom.getForecastStreamFlowByFeatureID( 'short_range', \
+          feaid, int( c[8:]) ) )
 #        print "fcstFlowSRt00z: ", fcstFlowSRt00z
 
-print "Get Medium Range Forecast ... "
+print( "Get Medium Range Forecast ... " )
 if mr1 is not None:
-	for c in mr1:
-          print c
+    for c in mr1:
+          print( c )
           mrCom = OneDayNWMCom( comdir, c[:8] ) 
           fcstFlowMR1t00z.append( \
-	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem1', \
-		  feaid, int( c[8:]) ) )
+         mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem1', \
+          feaid, int( c[8:]) ) )
 
 if mr2 is not None:
-	for c in mr2:
+    for c in mr2:
           mrCom = OneDayNWMCom( comdir, c[:8] ) 
           fcstFlowMR2t00z.append( \
-	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem2', \
-		  feaid, int( c[8:]) ) )
+         mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem2', \
+          feaid, int( c[8:]) ) )
 
 if mr3 is not None:
-	for c in mr3:
+    for c in mr3:
           mrCom = OneDayNWMCom( comdir, c[:8] ) 
           fcstFlowMR3t00z.append( \
-	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem3', \
-		  feaid, int( c[8:]) ) )
+         mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem3', \
+          feaid, int( c[8:]) ) )
 
 if mr4 is not None:
-	for c in mr4:
+    for c in mr4:
           mrCom = OneDayNWMCom( comdir, c[:8] ) 
           fcstFlowMR4t00z.append( \
-	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem4', \
-		  feaid, int( c[8:]) ) )
+         mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem4', \
+          feaid, int( c[8:]) ) )
 
 if mr5 is not None:
-	for c in mr5:
+    for c in mr5:
           mrCom = OneDayNWMCom( comdir, c[:8] ) 
           fcstFlowMR5t00z.append( \
-	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem5', \
-		  feaid, int( c[8:]) ) )
+         mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem5', \
+          feaid, int( c[8:]) ) )
 
 if mr6 is not None:
-	for c in mr6:
+    for c in mr6:
           mrCom = OneDayNWMCom( comdir, c[:8] ) 
           fcstFlowMR6t00z.append( \
-	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem6', \
-		  feaid, int( c[8:]) ) )
+         mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem6', \
+          feaid, int( c[8:]) ) )
 
 if mr7 is not None:
-	for c in mr7:
+    for c in mr7:
           mrCom = OneDayNWMCom( comdir, c[:8] ) 
           fcstFlowMR7t00z.append( \
-	     mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem7', \
-		  feaid, int( c[8:]) ) )
+         mrCom.getForecastStreamFlowByFeatureID( 'medium_range_mem7', \
+          feaid, int( c[8:]) ) )
 
-print  fcstFlowMR1t00z,  fcstFlowMR2t00z
-print "Get Long Range Mem1 Forecast ... "
+print(  fcstFlowMR1t00z,  fcstFlowMR2t00z )
+print( "Get Long Range Mem1 Forecast ... " )
 if lr1 is not None:
-	for c in lr1:
+    for c in lr1:
           lr1Com = OneDayNWMCom( comdir, c[:8] ) 
           fcstFlowLR1t00z.append( \
-	     lr1Com.getForecastStreamFlowByFeatureID( 'long_range_mem1', \
-		  feaid, int( c[8:]) ) )
+         lr1Com.getForecastStreamFlowByFeatureID( 'long_range_mem1', \
+          feaid, int( c[8:]) ) )
 
-print "Get Long Range Mem2 Forecast ... "
+print( "Get Long Range Mem2 Forecast ... " )
 if lr2 is not None:
-	for c in lr2:
+    for c in lr2:
           lr2Com = OneDayNWMCom( comdir, c[:8] ) 
           fcstFlowLR2t00z.append( \
-		  lr2Com.getForecastStreamFlowByFeatureID( \
-		  'long_range_mem2', feaid, int( c[8:]) ) )
+          lr2Com.getForecastStreamFlowByFeatureID( \
+          'long_range_mem2', feaid, int( c[8:]) ) )
 
-print "Get Long Range Mem3 Forecast ... "
+print( "Get Long Range Mem3 Forecast ... ")
 if lr3 is not None:
-	for c in lr3:
+    for c in lr3:
           lr3Com = OneDayNWMCom( comdir, c[:8] ) 
           fcstFlowLR3t00z.append( \
-		  lr3Com.getForecastStreamFlowByFeatureID( \
-		  'long_range_mem3', feaid, int( c[8:]) ) )
+          lr3Com.getForecastStreamFlowByFeatureID( \
+          'long_range_mem3', feaid, int( c[8:]) ) )
 
-print "Get Long Range Mem4 Forecast ... "
+print( "Get Long Range Mem4 Forecast ... " )
 if lr4 is not None:
-	for c in lr4:
+    for c in lr4:
           lr4Com = OneDayNWMCom( comdir, c[:8] ) 
           fcstFlowLR4t00z.append( \
-			  lr4Com.getForecastStreamFlowByFeatureID( \
-		  'long_range_mem4', feaid, int( c[8:]) ) )
+              lr4Com.getForecastStreamFlowByFeatureID( \
+          'long_range_mem4', feaid, int( c[8:]) ) )
 
 #print 'fcstFlowLR1t00z:', fcstFlowLR1t00z
 #print 'fcstFlowMRt00z:', fcstFlowMRt00z
@@ -350,17 +352,17 @@ if lr4 is not None:
 while dateiter < endpdy:
 
     com = OneDayNWMCom( comdir, dateiter.strftime(  "%Y%m%d" ) )
-		            
+
 #    com.getForecastPoint( "/gpfs/hps/nwc/noscrub/Brian.Cosgrove/nwm_parm.v1.2/1.2/template/WRF_Hydro_NWM_v1.1_geospatial_data_template_channel_point_netcdf.nc", [37.37569444, -91.5528056] )
 
     if tm0 is not None and dateiter >= tm0dt:
-       print "Get tm0 ... ", dateiter
+       print( "Get tm0 ... ", dateiter )
        simdFlowtm0 += com.getStreamFlowByFeatureID( 'analysis_assim', feaid, 0 )
     if tm1 is not None and dateiter >= tm1dt:
-       print "Get tm1 ... ", dateiter
+       print( "Get tm1 ... ", dateiter )
        simdFlowtm1 += com.getStreamFlowByFeatureID( 'analysis_assim', feaid, 1 )
     if tm2 is not None and dateiter >= tm2dt:
-       print "Get tm2 ... ", dateiter
+       print( "Get tm2 ... ", dateiter )
        simdFlowtm2 += com.getStreamFlowByFeatureID( 'analysis_assim', feaid, 2 )
 
     flow += com.getUSGSStationRealTimeStreamFlow( usgsSta )
@@ -373,7 +375,7 @@ flow_date = []
 flow_value = []
 
 for f in flow:
-   print f
+   print( f )
    flow_value.append( f[1] )
    flow_date.append( datetime.strptime( f[0], "%Y-%m-%d_%H:%M:%S" ) )
 
@@ -396,7 +398,7 @@ for f in simdFlowtm2:
    simdflowtm2_value.append( f[1] )
    simdflowtm2_date.append( f[0] )
 
-print "Make figure ... "
+print( "Make figure ... " )
 
 fig = Figure(figsize=(3*4,3*3))
 
@@ -405,124 +407,124 @@ canvas = FigureCanvas(fig)
 ax = fig.add_subplot(111)
 
 if ana is not None:
-	for f, c in  zip( fcstFlowAAt00z, ana ):
+    for f, c in  zip( fcstFlowAAt00z, ana ):
           dischargeplot, = ax.plot( [i[0] for i in f], [i[1] for i in f], \
-			  linestyle='-', \
-	  marker=None, color='k', label='AnA ' + c )
+              linestyle='-', \
+      marker=None, color='k', label='AnA ' + c )
 
 if ana_extend is not None:
-	for f, c in  zip( fcstFlowAAExtendt00z, ana_extend ):
+    for f, c in  zip( fcstFlowAAExtendt00z, ana_extend ):
           dischargeplot, = ax.plot( [i[0] for i in f], [i[1] for i in f], \
-			  linestyle='-', \
-	  marker=None, color='k', label='AnAEx ' + c )
+              linestyle='-', \
+      marker=None, color='k', label='AnAEx ' + c )
 
 if ana_long is not None:
-	for f, c in  zip( fcstFlowAALongt00z, ana_long ):
+    for f, c in  zip( fcstFlowAALongt00z, ana_long ):
           dischargeplot, = ax.plot( [i[0] for i in f], [i[1] for i in f], \
-			  linestyle='-', \
-	  marker=None, color='k', label='AnALong ' + c )
+              linestyle='-', \
+      marker=None, color='k', label='AnALong ' + c )
 
 if sr is not None:
-	for f, c in  zip( fcstFlowSRt00z, sr ):
+    for f, c in  zip( fcstFlowSRt00z, sr ):
           dischargeplot, = ax.plot( [i[0] for i in f], [i[1] for i in f], \
-			  linestyle='--', \
-	  marker=None, color='k', label='SR ' + c )
+              linestyle='--', \
+      marker=None, color='k', label='SR ' + c )
 
 if mr1 is not None:
-	for f, c in  zip( fcstFlowMR1t00z, mr1 ):
+    for f, c in  zip( fcstFlowMR1t00z, mr1 ):
           dischargeplot, = ax.plot( [i[0] for i in f], \
-		          [i[1] for i in f], \
-			  linestyle='-.', \
-	  marker=None, color='k', label='MR1 ' + c)
+                  [i[1] for i in f], \
+              linestyle='-.', \
+      marker=None, color='k', label='MR1 ' + c)
 
 if mr2 is not None:
-	for f, c in  zip( fcstFlowMR2t00z, mr2 ):
+    for f, c in  zip( fcstFlowMR2t00z, mr2 ):
           dischargeplot, = ax.plot( [i[0] for i in f], \
-		          [i[1] for i in f], \
-			  linestyle='-.', \
-	  marker=None, color='k', label='MR2 ' + c)
+                  [i[1] for i in f], \
+              linestyle='-.', \
+      marker=None, color='k', label='MR2 ' + c)
 
 if mr3 is not None:
-	for f, c in  zip( fcstFlowMR3t00z, mr3 ):
+    for f, c in  zip( fcstFlowMR3t00z, mr3 ):
           dischargeplot, = ax.plot( [i[0] for i in f], \
-		          [i[1] for i in f], \
-			  linestyle='-.', \
-	  marker=None, color='k', label='MR3 ' + c)
+                  [i[1] for i in f], \
+              linestyle='-.', \
+      marker=None, color='k', label='MR3 ' + c)
 
 if mr4 is not None:
-	for f, c in  zip( fcstFlowMR4t00z, mr4 ):
+    for f, c in  zip( fcstFlowMR4t00z, mr4 ):
           dischargeplot, = ax.plot( [i[0] for i in f], \
-		          [i[1] for i in f], \
-			  linestyle='-.', \
-	  marker=None, color='k', label='MR4 ' + c)
+                  [i[1] for i in f], \
+              linestyle='-.', \
+      marker=None, color='k', label='MR4 ' + c)
 
 if mr5 is not None:
-	for f, c in  zip( fcstFlowMR5t00z, mr5 ):
+    for f, c in  zip( fcstFlowMR5t00z, mr5 ):
           dischargeplot, = ax.plot( [i[0] for i in f], \
-		          [i[1] for i in f], \
-			  linestyle='-.', \
-	  marker=None, color='k', label='MR5 ' + c)
+                  [i[1] for i in f], \
+              linestyle='-.', \
+      marker=None, color='k', label='MR5 ' + c)
 
 if mr6 is not None:
-	for f, c in  zip( fcstFlowMR6t00z, mr6 ):
+    for f, c in  zip( fcstFlowMR6t00z, mr6 ):
           dischargeplot, = ax.plot( [i[0] for i in f], \
-		          [i[1] for i in f], \
-			  linestyle='-.', \
-	  marker=None, color='k', label='MR6 ' + c)
+                  [i[1] for i in f], \
+              linestyle='-.', \
+      marker=None, color='k', label='MR6 ' + c)
 
 if mr7 is not None:
-	for f, c in  zip( fcstFlowMR7t00z, mr7 ):
+    for f, c in  zip( fcstFlowMR7t00z, mr7 ):
           dischargeplot, = ax.plot( [i[0] for i in f], \
-		          [i[1] for i in f], \
-			  linestyle='-.', \
-	  marker=None, color='k', label='MR7 ' + c)
+                  [i[1] for i in f], \
+              linestyle='-.', \
+      marker=None, color='k', label='MR7 ' + c)
 
 if lr1 is not None:
-	for f, c in  zip( fcstFlowLR1t00z, lr1 ):
+    for f, c in  zip( fcstFlowLR1t00z, lr1 ):
           dischargeplot, = ax.plot( [i[0] for i in f], \
-		          [i[1] for i in f], \
-			  linestyle=':', \
-	  marker="o", color='k', label='LR1 ' + c)
+                  [i[1] for i in f], \
+              linestyle=':', \
+      marker="o", color='k', label='LR1 ' + c)
 
 if lr2 is not None:
-	for f, c in  zip( fcstFlowLR2t00z, lr2 ):
+    for f, c in  zip( fcstFlowLR2t00z, lr2 ):
           dischargeplot, = ax.plot( [i[0] for i in f], \
-		          [i[1] for i in f], \
-			  linestyle=':', \
-	  marker="v", color='k', label='LR2 ' + c)
+                  [i[1] for i in f], \
+              linestyle=':', \
+      marker="v", color='k', label='LR2 ' + c)
 
 if lr3 is not None:
-	for f, c in  zip( fcstFlowLR3t00z, lr3 ):
+    for f, c in  zip( fcstFlowLR3t00z, lr3 ):
           dischargeplot, = ax.plot( [i[0] for i in f], \
-		          [i[1] for i in f], \
-			  linestyle=':', \
-   	   marker="x", color='k', label='LR3 ' + c)
+                  [i[1] for i in f], \
+              linestyle=':', \
+       marker="x", color='k', label='LR3 ' + c)
 
 if lr4 is not None:
-	for f, c in  zip( fcstFlowLR3t00z, lr4 ):
+    for f, c in  zip( fcstFlowLR3t00z, lr4 ):
           dischargeplot, = ax.plot( [i[0] for i in f], \
-		          [i[1] for i in f], \
-			  linestyle=':', \
-	    marker="s", color='k', label='LR4 ' + c)
+                  [i[1] for i in f], \
+              linestyle=':', \
+        marker="s", color='k', label='LR4 ' + c)
 
 dischargeplot, = ax.plot( flow_date, flow_value, linestyle='', \
-	marker='o', markersize=3, markerfacecolor='None', color='k',\
+    marker='o', markersize=3, markerfacecolor='None', color='k',\
         label='USGS Obv')
 
 if tm0 is not None:
       dischargeplot, = ax.plot( simdflowtm0_date, simdflowtm0_value, linestyle='-', \
-	marker='x', markersize=3, markerfacecolor='None', color='k', \
-	label='AnA tm00')
+    marker='x', markersize=3, markerfacecolor='None', color='k', \
+    label='AnA tm00')
 
 if tm1 is not None:
       dischargeplot, = ax.plot( simdflowtm1_date, simdflowtm1_value, linestyle='-', \
-	marker='*', markersize=3, markerfacecolor='None', color='k', \
-	label='AnA tm01')
+    marker='*', markersize=3, markerfacecolor='None', color='k', \
+    label='AnA tm01')
 
 if tm2 is not None:
       dischargeplot, = ax.plot( simdflowtm2_date, simdflowtm2_value, linestyle='-', \
-	marker='v', markersize=3, markerfacecolor='None', color='k', \
-	label='AnA tm02')
+    marker='v', markersize=3, markerfacecolor='None', color='k', \
+    label='AnA tm02')
 
 ax.xaxis.set_major_locator( mdates.DayLocator() )
 ax.xaxis.set_minor_locator( mdates.HourLocator() )
