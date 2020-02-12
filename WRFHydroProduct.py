@@ -68,6 +68,8 @@ class WRFHydroModelProduct:
 
               if re.match( r'.*\.usgsTimeSlice\.ncdf', self.prodId ) :
                       return 'usgs_timeslices'
+              if re.match( r'.*\.usaceTimeSlice\.ncdf', self.prodId ) :
+                      return 'ace_timeslices'
               elif re.match( r'HYDRO_RST\..*_DOMAIN1', self.prodId ) \
                 or re.match( r'RESTART\..*_DOMAIN1', self.prodId )  \
                 or re.match( r'nudgingLastObs\..*\.nc', self.prodId ): 
@@ -83,8 +85,8 @@ class WRFHydroModelProduct:
               else:
                       return None
 
-      def getNumberOfUSGSStations(self ):
-              if 'usgs_timeslices' != self.getProductType() :
+      def getNumberOfStations(self, caseType ):
+              if caseType != self.getProductType() :
                   raise RuntimeError( "Product is not a USGS timeslices " + \
                                   self.prodId )
               return (self.nc_fid.getncattr( 'sliceCenterTimeUTC' ), \

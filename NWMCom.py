@@ -47,6 +47,7 @@ class NWMCom:
                                  ('restart_extend', []),            \
                                  ('restart_hawaii', []),            \
                                  ('restart_long', []),            \
+                                 ('ace_timeslices', []),            \
                                  ('usgs_timeslices', []) ] )
 
         for k in self.filenames.keys():
@@ -194,6 +195,15 @@ class NWMCom:
                             caseType[22:23] + \
                             '.forcing.f' + format( i, ">03") + '.conus.nc' )
 
+              elif caseType == "ace_timeslices" :
+                 dt = \
+                  datetime.strptime( self.pdy+self.cycle, "%Y%m%d%H" )
+                 for i in range(0, 4 ):
+                    d = timedelta( minutes = i * 15 )
+                    self.filenames['ace_timeslices'].append(
+                     ( dt +  d ).strftime( "%Y-%m-%d_%H:%M:00." ) + \
+                     '15min.usaceTimeSlice.ncdf' )
+
               elif caseType == "usgs_timeslices" :
                  dt = \
                   datetime.strptime( self.pdy+self.cycle, "%Y%m%d%H" )
@@ -323,17 +333,17 @@ class NWMCom:
 #                            for f in missingfiles:
 #                                    print "    " + f
        
-      def getTimeSlicesNumberOfStations( self ):
+      def getTimeSlicesNumberOfStations( self, caseType='usgs_timeslices'  ):
               numofstations = []
-              for f in self.filenames[ 'usgs_timeslices' ]:
+              for f in self.filenames[ caseType ]:
                    fn = self.dir + '/nwm.' + self.pdy + \
-                                   '/usgs_timeslices/'+ f
+                                   '/' + caseType + '/'+ f
                    nextday = datetime.strptime( self.pdy, "%Y%m%d" ) + \
                                    timedelta(days=1)
 
                    nextdayfn = self.dir + '/nwm.' + \
                                    nextday.strftime( "%Y%m%d" ) + \
-                                   '/usgs_timeslices/'+ f
+                                   '/' + caseType + '/'+ f
 
                    if os.path.exists( nextdayfn ) and \
                                    os.path.isfile( nextdayfn ) :
@@ -343,7 +353,7 @@ class NWMCom:
                       print("Found timeslice file: " + fn  )
                       prod = WRFHydroModelProduct( fn )
                       numofstations.append( \
-                                      prod.getNumberOfUSGSStations() )
+                                      prod.getNumberOfStations( caseType ) )
                       prod.close()
                    else:
                       print("No timeslice file: " + fn  )

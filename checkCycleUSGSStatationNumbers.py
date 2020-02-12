@@ -24,16 +24,16 @@ def main(argv):
    output = ''
    try:
       opts, args = \
-	      getopt.getopt(argv,"hd:p:c:o:",["dir=", "pdy=", "cycle=", "output=" ])
+                      getopt.getopt(argv,"hd:p:c:o:t:",["dir=", "pdy=", "cycle=", "output=", "casetype=" ])
    except getopt.GetoptError:
       print( \
-        'checkCycleUSGSStatationNumbers.py -d <comdir> -p <pdy> -c <cycle> -o <output>' )
+        'checkCycleUSGSStatationNumbers.py -d <comdir> -p <pdy> -c <cycle> -o <output> -t <casetype>' )
       sys.exit(2)
    for opt, arg in opts:
       print( opt, arg )
       if opt == '-h':
          print(  \
-        'checkCycleUSGSStatationNumbers.py -d <comdir> -p <pdy> -c <cycle> -o <output>' )
+        'checkCycleUSGSStatationNumbers.py -d <comdir> -p <pdy> -c <cycle> -o <output> -t <casetype>' )
          sys.exit()
       elif opt in ('-d', "--dir"):
          comdir = arg
@@ -47,12 +47,18 @@ def main(argv):
          cycle = arg
       elif opt in ('-o', "--output" ):
          output=arg
+      elif opt in ('-t', "--casetype" ):
+         casetype=arg
+         if not ( casetype == 'usgs' or casetype == 'usace' ):
+             print( 'casetype: ', casetype, ' unknown!')
+             sys.exit()
+
   
 #   print 'com dir is "', comdir, '"'
 #   print 'pdy is "', pdy, '"'
 #   print 'cyc is "', cycle, '"'
 
-   return (comdir, pdy, cycle, output)
+   return (comdir, pdy, cycle, output, casetype)
 
 
 if __name__ == "__main__":
@@ -63,6 +69,7 @@ pdy = pgmopt[1]
 cycle = int( pgmopt[2] )
 dt = datetime.strptime( pgmopt[1] + pgmopt[2], "%Y%m%d%H" )
 output = pgmopt[3]
+casetype = pgmopt[4]
 
 numofstationsintimeslices = []
 numofstationsintimeslices_m1 = []
@@ -77,17 +84,36 @@ pdy_m4 = ( dt - timedelta( hours = 4) ).strftime( "%Y%m%d" )
 cycle_m4 =  ( dt - timedelta( hours = 4) ).strftime( "%H" )
 
 com = OneDayNWMCom( comdir, pdy )
-numofstationsintimeslices = com.getUSGSTimeSlicesNumOfStationsByCycle( cycle )
+if casetype == 'usgs':
+  numofstationsintimeslices = com.getUSGSTimeSlicesNumOfStationsByCycle( cycle )
+elif casetype == 'usace':
+  numofstationsintimeslices = \
+                        com.getUSACETimeSlicesNumOfStationsByCycle( cycle )
+else:
+  print( 'casetype: ', casetype, ' unknown!')
+  sys.exit()
+
 
 com_m1 = OneDayNWMCom( comdir, pdy_m1 )
 com_m2 = OneDayNWMCom( comdir, pdy_m2 )
 com_m4 = OneDayNWMCom( comdir, pdy_m4 )
-numofstationsintimeslices_m1 = \
+if casetype == 'usgs':
+   numofstationsintimeslices_m1 = \
 		com_m1.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m1) )
-numofstationsintimeslices_m2 = \
+   numofstationsintimeslices_m2 = \
 		com_m2.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m2) )
-numofstationsintimeslices_m4 = \
+   numofstationsintimeslices_m4 = \
 		com_m4.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m4) )
+elif casetype == 'usace':
+   numofstationsintimeslices_m1 = \
+		com_m1.getUSACETimeSlicesNumOfStationsByCycle( int(cycle_m1) )
+   numofstationsintimeslices_m2 = \
+		com_m2.getUSACETimeSlicesNumOfStationsByCycle( int(cycle_m2) )
+   numofstationsintimeslices_m4 = \
+		com_m4.getUSACETimeSlicesNumOfStationsByCycle( int(cycle_m4) )
+else:
+  print( 'casetype: ', casetype, ' unknown!')
+  sys.exit()
 
 print( output )
 print( len( numofstationsintimeslices ) )

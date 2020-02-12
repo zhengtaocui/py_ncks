@@ -4,6 +4,7 @@ import os, sys, time, urllib, getopt, copy
 import gzip, shutil, re
 #import netCDF4     
 import numpy as np 
+from  datetime import *
 from string import *
 import matplotlib.dates as mdates
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -11,8 +12,6 @@ from matplotlib.figure import Figure
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter, Formatter
 from matplotlib.ticker import FuncFormatter
 #from cycler import cycler
-
-from OneDayNWMCom import *
 
 def main(argv):
    """
@@ -25,20 +24,20 @@ def main(argv):
       opts, args = \
 	      getopt.getopt(argv,"hi:o:t:",["input=", "output=", "title="])
    except getopt.GetoptError:
-      print \
-        'heckUSGSStatationNumbers.py -d <comdir> -s <startpdy> -e <endpdy>' 
+      print( \
+        'checkUSGSStatationNumbers.py -i <input> -o <output> -t <title> ' ) 
       sys.exit(2)
    for opt, arg in opts:
-      print opt, arg
+      print( opt, arg )
       if opt == '-h':
-         print  \
-           'checkUSGSStatationNumbers.py -d <comdir> -s <startpdy> -e <endpdy>' 
+         print(  \
+          'checkUSGSStatationNumbers.py -i <input> -o <output> -t <title> ' ) 
          sys.exit()
       elif opt in ('-i', "--input"):
          input = arg
          if not os.path.exists( input ):
            if os.path.isdir( input ):
-             print 'input ', input, ' does not exist!'
+             print( 'input ', input, ' does not exist!' )
              sys.exit()
       elif opt in ('-o', "--output" ):
          output = arg
@@ -73,7 +72,7 @@ for line in infile:
       try:
               station_num[ i ].append( int( values[ i + 1 ] ) )
       except:
-	      print "Error: ", line
+	      print( "Error: ", line )
 	      station_num[ i ].append( 0 )
    station_date.append( datetime.strptime( values[0], "%Y-%m-%d_%H:%M:%S" ) )
 
@@ -98,7 +97,7 @@ ax.xaxis.set_minor_formatter( mdates.DateFormatter('%Hz' ))
 #fig.autofmt_xdate()
 
 for i in [0, 4, 3, 2, 1, 8, 7, 6, 5, 9]:
-      print i
+      print( i )
       numofstationsplot, = ax.plot_date( station_date, station_num[i], \
 	      linestyle=linestyles[ i % 4 ], label=legd_labels[ i ], \
             marker=markers[ i % 5 ], markersize=5, markerfacecolor='None', color='k' )
@@ -123,7 +122,7 @@ ax.grid( True, "minor", "x" )
 ax.grid( True, "major", "y" )
 
 ax.set_xlabel( 'Cycle' )
-ax.set_ylabel( 'Number of USGS Stations' )
+ax.set_ylabel( 'Number of Stations' )
 ax.set_title( title )
 lgd = ax.legend( bbox_to_anchor=(1.02, 1), loc=2, borderaxespad=0. ) 
 #ax.legend(loc='center', ncol=3, bbox_to_anchor=(0.5,-0.23))

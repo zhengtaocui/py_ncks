@@ -38,6 +38,15 @@ class OneDayNWMCom:
                break
           return numofstations
 
+      def getUSACETimeSlicesNumOfStationsByCycle( self, cycle ):
+          numofstations = []
+          for com in self.oneDayCom:
+             if com.cycle == format( cycle, ">02d" ):
+               numofstations += \
+                        com.getTimeSlicesNumberOfStations('ace_timeslices' )
+               break
+          return numofstations
+
       def getUSGSStationRealTimeStreamFlow( self, stationId ):
           flows = []
           for com in self.oneDayCom:

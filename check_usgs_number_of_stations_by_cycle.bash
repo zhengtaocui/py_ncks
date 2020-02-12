@@ -17,5 +17,5 @@ if [ ! -e "/gpfs/hps3/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations" ]; then mkdi
 
 cd /gpfs/hps3/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations
 
-/gpfs/hps3/nwc/noscrub/Zhengtao.Cui/py_ncks_sss_copy/checkCycleUSGSStatationNumbers.py -d /gpfs/hps/nco/ops/com/nwm/prod -p $pdy -c $cycle -o /gpfs/hps3/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations/real_time_station_numbers.txt >> /gpfs/hps3/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations/checkCycle.log 2>&1
+/gpfs/hps3/nwc/noscrub/Zhengtao.Cui/py_ncks_sss_copy/checkCycleUSGSStatationNumbers.py -d /gpfs/hps/nco/ops/com/nwm/prod -p $pdy -c $cycle -o /gpfs/hps3/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations/real_time_station_numbers.txt -t usgs >> /gpfs/hps3/ptmp/Zhengtao.Cui/cycle_usgs_num_of_stations/checkCycle.log 2>&1
 
