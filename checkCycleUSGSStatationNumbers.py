@@ -49,7 +49,8 @@ def main(argv):
          output=arg
       elif opt in ('-t', "--casetype" ):
          casetype=arg
-         if not ( casetype == 'usgs' or casetype == 'usace' ):
+         if not ( casetype == 'usgs' or casetype == 'usace' or \
+                         casetype == 'canadian' or casetype == 'rfc' ):
              print( 'casetype: ', casetype, ' unknown!')
              sys.exit()
 
@@ -89,6 +90,12 @@ if casetype == 'usgs':
 elif casetype == 'usace':
   numofstationsintimeslices = \
                         com.getUSACETimeSlicesNumOfStationsByCycle( cycle )
+elif casetype == 'canadian':
+  numofstationsintimeslices = \
+                        com.getCanadianTimeSlicesNumOfStationsByCycle( cycle )
+elif casetype == 'rfc':
+  numofstationsintimeslices = \
+                        com.getRFCTimeSlicesNumOfStationsByCycle( cycle )
 else:
   print( 'casetype: ', casetype, ' unknown!')
   sys.exit()
@@ -111,6 +118,20 @@ elif casetype == 'usace':
 		com_m2.getUSACETimeSlicesNumOfStationsByCycle( int(cycle_m2) )
    numofstationsintimeslices_m4 = \
 		com_m4.getUSACETimeSlicesNumOfStationsByCycle( int(cycle_m4) )
+elif casetype == 'canadian':
+   numofstationsintimeslices_m1 = \
+		com_m1.getCanadianTimeSlicesNumOfStationsByCycle( int(cycle_m1) )
+   numofstationsintimeslices_m2 = \
+		com_m2.getCanadianTimeSlicesNumOfStationsByCycle( int(cycle_m2) )
+   numofstationsintimeslices_m4 = \
+		com_m4.getCanadianTimeSlicesNumOfStationsByCycle( int(cycle_m4) )
+elif casetype == 'rfc':
+   numofstationsintimeslices_m1 = \
+		com_m1.getRFCTimeSlicesNumOfStationsByCycle( int(cycle_m1) )
+   numofstationsintimeslices_m2 = \
+		com_m2.getRFCTimeSlicesNumOfStationsByCycle( int(cycle_m2) )
+   numofstationsintimeslices_m4 = \
+		com_m4.getRFCTimeSlicesNumOfStationsByCycle( int(cycle_m4) )
 else:
   print( 'casetype: ', casetype, ' unknown!')
   sys.exit()
@@ -132,14 +153,20 @@ if numofstationsintimeslices_m1:
 	   outf.write('\t')
 	   outf.write( str(s[1]) )
 else:
-   outf.write( '\t0\t0\t0\t0')
+   if casetype == 'rfc':
+      outf.write( '\t0')
+   else:
+      outf.write( '\t0\t0\t0\t0')
 
 if numofstationsintimeslices_m2:
    for s in numofstationsintimeslices_m2:
 	   outf.write('\t')
 	   outf.write( str(s[1]) )
 else:
-   outf.write( '\t0\t0\t0\t0')
+   if casetype == 'rfc':
+      outf.write( '\t0')
+   else:
+      outf.write( '\t0\t0\t0\t0')
 
 if numofstationsintimeslices_m4:
    outf.write('\t')

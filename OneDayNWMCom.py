@@ -47,6 +47,24 @@ class OneDayNWMCom:
                break
           return numofstations
 
+      def getCanadianTimeSlicesNumOfStationsByCycle( self, cycle ):
+          numofstations = []
+          for com in self.oneDayCom:
+             if com.cycle == format( cycle, ">02d" ):
+               numofstations += \
+                        com.getTimeSlicesNumberOfStations('canada_timeslices' )
+               break
+          return numofstations
+
+      def getRFCTimeSlicesNumOfStationsByCycle( self, cycle ):
+          numofstations = []
+          for com in self.oneDayCom:
+             if com.cycle == format( cycle, ">02d" ):
+               numofstations += \
+                        com.getTimeSlicesNumberOfStations('rfc_timeslices' )
+               break
+          return numofstations
+
       def getUSGSStationRealTimeStreamFlow( self, stationId ):
           flows = []
           for com in self.oneDayCom:

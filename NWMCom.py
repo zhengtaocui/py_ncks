@@ -1,6 +1,7 @@
 import os
 import re
 import gzip
+import glob
 from datetime import datetime, timedelta
 from string import *
 from WRFHydroProduct import *
@@ -48,6 +49,8 @@ class NWMCom:
                                  ('restart_hawaii', []),            \
                                  ('restart_long', []),            \
                                  ('ace_timeslices', []),            \
+                                 ('canada_timeslices', []),            \
+                                 ('rfc_timeslices', []),            \
                                  ('usgs_timeslices', []) ] )
 
         for k in self.filenames.keys():
@@ -204,6 +207,22 @@ class NWMCom:
                      ( dt +  d ).strftime( "%Y-%m-%d_%H:%M:00." ) + \
                      '15min.usaceTimeSlice.ncdf' )
 
+              elif caseType == "canada_timeslices" :
+                 dt = \
+                  datetime.strptime( self.pdy+self.cycle, "%Y%m%d%H" )
+                 for i in range(0, 4 ):
+                    d = timedelta( minutes = i * 15 )
+                    self.filenames['canada_timeslices'].append(
+                     ( dt +  d ).strftime( "%Y-%m-%d_%H_%M_00." ) + \
+                     '15min.wscTimeSlice.ncdf' )
+
+              elif caseType == "rfc_timeslices" :
+                 dt = \
+                  datetime.strptime( self.pdy+self.cycle, "%Y%m%d%H" )
+                 self.filenames['rfc_timeslices'].append(
+                     ( dt ).strftime( "%Y-%m-%d_%H." ) + \
+                     '60min.?????.RFCTimeSlice.ncdf' )
+
               elif caseType == "usgs_timeslices" :
                  dt = \
                   datetime.strptime( self.pdy+self.cycle, "%Y%m%d%H" )
@@ -333,7 +352,17 @@ class NWMCom:
 #                            for f in missingfiles:
 #                                    print "    " + f
        
+      def getRFCTimeSlicesNumberOfStations( self ):
+              fn = self.dir + '/nwm.' + self.pdy + '/rfc_timeslices/' + \
+                              self.filenames[ 'rfc_timeslices' ][ 0 ]
+              return [ ( self.pdy[:4]+'-'+self.pdy[4:6]+'-'+self.pdy[6:8]+'_' \
+                         + self.cycle + ':00:00',  \
+                         len( glob.glob( fn ) ) ) ]
+
       def getTimeSlicesNumberOfStations( self, caseType='usgs_timeslices'  ):
+              if caseType == 'rfc_timeslices':
+                 return self.getRFCTimeSlicesNumberOfStations()
+
               numofstations = []
               for f in self.filenames[ caseType ]:
                    fn = self.dir + '/nwm.' + self.pdy + \

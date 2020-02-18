@@ -70,6 +70,8 @@ class WRFHydroModelProduct:
                       return 'usgs_timeslices'
               if re.match( r'.*\.usaceTimeSlice\.ncdf', self.prodId ) :
                       return 'ace_timeslices'
+              if re.match( r'.*\.wscTimeSlice\.ncdf', self.prodId ) :
+                      return 'canada_timeslices'
               elif re.match( r'HYDRO_RST\..*_DOMAIN1', self.prodId ) \
                 or re.match( r'RESTART\..*_DOMAIN1', self.prodId )  \
                 or re.match( r'nudgingLastObs\..*\.nc', self.prodId ): 
