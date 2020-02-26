@@ -385,6 +385,8 @@ class NWMCom:
                                       prod.getNumberOfStations( caseType ) )
                       prod.close()
                    else:
+                      numofstations.append( \
+                             ( f[:13] + ':' + f[14:16] + ':00', 0 ) )
                       print("No timeslice file: " + fn  )
 
               return numofstations
