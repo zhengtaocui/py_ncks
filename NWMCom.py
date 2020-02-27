@@ -50,7 +50,7 @@ class NWMCom:
                                  ('restart_long', []),            \
                                  ('ace_timeslices', []),            \
                                  ('canada_timeslices', []),            \
-                                 ('rfc_timeslices', []),            \
+                                 ('rfc_timeseries', []),            \
                                  ('usgs_timeslices', []) ] )
 
         for k in self.filenames.keys():
@@ -216,12 +216,12 @@ class NWMCom:
                      ( dt +  d ).strftime( "%Y-%m-%d_%H_%M_00." ) + \
                      '15min.wscTimeSlice.ncdf' )
 
-              elif caseType == "rfc_timeslices" :
+              elif caseType == "rfc_timeseries" :
                  dt = \
                   datetime.strptime( self.pdy+self.cycle, "%Y%m%d%H" )
-                 self.filenames['rfc_timeslices'].append(
+                 self.filenames['rfc_timeseries'].append(
                      ( dt ).strftime( "%Y-%m-%d_%H." ) + \
-                     '60min.?????.RFCTimeSlice.ncdf' )
+                     '60min.?????.RFCTimeSeries.ncdf' )
 
               elif caseType == "usgs_timeslices" :
                  dt = \
@@ -352,16 +352,16 @@ class NWMCom:
 #                            for f in missingfiles:
 #                                    print "    " + f
        
-      def getRFCTimeSlicesNumberOfStations( self ):
-              fn = self.dir + '/nwm.' + self.pdy + '/rfc_timeslices/' + \
-                              self.filenames[ 'rfc_timeslices' ][ 0 ]
+      def getRFCTimeSeriesNumberOfStations( self ):
+              fn = self.dir + '/nwm.' + self.pdy + '/rfc_timeseries/' + \
+                              self.filenames[ 'rfc_timeseries' ][ 0 ]
               return [ ( self.pdy[:4]+'-'+self.pdy[4:6]+'-'+self.pdy[6:8]+'_' \
                          + self.cycle + ':00:00',  \
                          len( glob.glob( fn ) ) ) ]
 
       def getTimeSlicesNumberOfStations( self, caseType='usgs_timeslices'  ):
-              if caseType == 'rfc_timeslices':
-                 return self.getRFCTimeSlicesNumberOfStations()
+              if caseType == 'rfc_timeseries':
+                 return self.getRFCTimeSeriesNumberOfStations()
 
               numofstations = []
               for f in self.filenames[ caseType ]:

@@ -95,7 +95,7 @@ elif casetype == 'canadian':
                         com.getCanadianTimeSlicesNumOfStationsByCycle( cycle )
 elif casetype == 'rfc':
   numofstationsintimeslices = \
-                        com.getRFCTimeSlicesNumOfStationsByCycle( cycle )
+                        com.getRFCTimeSeriesNumOfStationsByCycle( cycle )
 else:
   print( 'casetype: ', casetype, ' unknown!')
   sys.exit()
@@ -127,11 +127,11 @@ elif casetype == 'canadian':
 		com_m4.getCanadianTimeSlicesNumOfStationsByCycle( int(cycle_m4) )
 elif casetype == 'rfc':
    numofstationsintimeslices_m1 = \
-		com_m1.getRFCTimeSlicesNumOfStationsByCycle( int(cycle_m1) )
+		com_m1.getRFCTimeSeriesNumOfStationsByCycle( int(cycle_m1) )
    numofstationsintimeslices_m2 = \
-		com_m2.getRFCTimeSlicesNumOfStationsByCycle( int(cycle_m2) )
+		com_m2.getRFCTimeSeriesNumOfStationsByCycle( int(cycle_m2) )
    numofstationsintimeslices_m4 = \
-		com_m4.getRFCTimeSlicesNumOfStationsByCycle( int(cycle_m4) )
+		com_m4.getRFCTimeSeriesNumOfStationsByCycle( int(cycle_m4) )
 else:
   print( 'casetype: ', casetype, ' unknown!')
   sys.exit()

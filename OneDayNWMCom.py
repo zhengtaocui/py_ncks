@@ -56,12 +56,12 @@ class OneDayNWMCom:
                break
           return numofstations
 
-      def getRFCTimeSlicesNumOfStationsByCycle( self, cycle ):
+      def getRFCTimeSeriesNumOfStationsByCycle( self, cycle ):
           numofstations = []
           for com in self.oneDayCom:
              if com.cycle == format( cycle, ">02d" ):
                numofstations += \
-                        com.getTimeSlicesNumberOfStations('rfc_timeslices' )
+                        com.getTimeSlicesNumberOfStations('rfc_timeseries' )
                break
           return numofstations
 
