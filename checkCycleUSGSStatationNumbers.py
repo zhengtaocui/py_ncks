@@ -75,14 +75,26 @@ casetype = pgmopt[4]
 numofstationsintimeslices = []
 numofstationsintimeslices_m1 = []
 numofstationsintimeslices_m2 = []
+numofstationsintimeslices_m3 = []
 numofstationsintimeslices_m4 = []
+numofstationsintimeslices_m6 = []
+numofstationsintimeslices_m12 = []
+numofstationsintimeslices_m28 = []
 
 pdy_m1 = ( dt - timedelta( hours = 1) ).strftime( "%Y%m%d" )
 cycle_m1 =  ( dt - timedelta( hours = 1) ).strftime( "%H" )
 pdy_m2 = ( dt - timedelta( hours = 2) ).strftime( "%Y%m%d" )
 cycle_m2 =  ( dt - timedelta( hours = 2) ).strftime( "%H" )
+pdy_m3 = ( dt - timedelta( hours = 3) ).strftime( "%Y%m%d" )
+cycle_m3 =  ( dt - timedelta( hours = 3) ).strftime( "%H" )
 pdy_m4 = ( dt - timedelta( hours = 4) ).strftime( "%Y%m%d" )
 cycle_m4 =  ( dt - timedelta( hours = 4) ).strftime( "%H" )
+pdy_m6 = ( dt - timedelta( hours = 6) ).strftime( "%Y%m%d" )
+cycle_m6 =  ( dt - timedelta( hours = 6) ).strftime( "%H" )
+pdy_m12 = ( dt - timedelta( hours = 12) ).strftime( "%Y%m%d" )
+cycle_m12 =  ( dt - timedelta( hours = 12) ).strftime( "%H" )
+pdy_m28 = ( dt - timedelta( hours = 28) ).strftime( "%Y%m%d" )
+cycle_m28 =  ( dt - timedelta( hours = 28) ).strftime( "%H" )
 
 com = OneDayNWMCom( comdir, pdy )
 if casetype == 'usgs':
@@ -103,35 +115,71 @@ else:
 
 com_m1 = OneDayNWMCom( comdir, pdy_m1 )
 com_m2 = OneDayNWMCom( comdir, pdy_m2 )
+com_m3 = OneDayNWMCom( comdir, pdy_m3 )
 com_m4 = OneDayNWMCom( comdir, pdy_m4 )
+com_m6 = OneDayNWMCom( comdir, pdy_m6 )
+com_m12 = OneDayNWMCom( comdir, pdy_m12 )
+com_m28 = OneDayNWMCom( comdir, pdy_m28 )
 if casetype == 'usgs':
    numofstationsintimeslices_m1 = \
 		com_m1.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m1) )
    numofstationsintimeslices_m2 = \
 		com_m2.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m2) )
+   numofstationsintimeslices_m3 = \
+		com_m3.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m3) )
    numofstationsintimeslices_m4 = \
 		com_m4.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m4) )
+   numofstationsintimeslices_m6 = \
+		com_m6.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m6) )
+   numofstationsintimeslices_m12 = \
+		com_m12.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m12) )
+   numofstationsintimeslices_m28 = \
+		com_m28.getUSGSTimeSlicesNumOfStationsByCycle( int(cycle_m28) )
 elif casetype == 'usace':
    numofstationsintimeslices_m1 = \
 		com_m1.getUSACETimeSlicesNumOfStationsByCycle( int(cycle_m1) )
    numofstationsintimeslices_m2 = \
 		com_m2.getUSACETimeSlicesNumOfStationsByCycle( int(cycle_m2) )
+   numofstationsintimeslices_m3 = \
+		com_m3.getUSACETimeSlicesNumOfStationsByCycle( int(cycle_m3) )
    numofstationsintimeslices_m4 = \
 		com_m4.getUSACETimeSlicesNumOfStationsByCycle( int(cycle_m4) )
+   numofstationsintimeslices_m6 = \
+		com_m6.getUSACETimeSlicesNumOfStationsByCycle( int(cycle_m6) )
+   numofstationsintimeslices_m12 = \
+		com_m12.getUSACETimeSlicesNumOfStationsByCycle( int(cycle_m12) )
+   numofstationsintimeslices_m28 = \
+		com_m28.getUSACETimeSlicesNumOfStationsByCycle( int(cycle_m28) )
 elif casetype == 'canadian':
    numofstationsintimeslices_m1 = \
 		com_m1.getCanadianTimeSlicesNumOfStationsByCycle( int(cycle_m1) )
    numofstationsintimeslices_m2 = \
 		com_m2.getCanadianTimeSlicesNumOfStationsByCycle( int(cycle_m2) )
+   numofstationsintimeslices_m3 = \
+		com_m3.getCanadianTimeSlicesNumOfStationsByCycle( int(cycle_m3) )
    numofstationsintimeslices_m4 = \
 		com_m4.getCanadianTimeSlicesNumOfStationsByCycle( int(cycle_m4) )
+   numofstationsintimeslices_m6 = \
+		com_m6.getCanadianTimeSlicesNumOfStationsByCycle( int(cycle_m6) )
+   numofstationsintimeslices_m12 = \
+		com_m12.getCanadianTimeSlicesNumOfStationsByCycle( int(cycle_m12) )
+   numofstationsintimeslices_m28 = \
+		com_m28.getCanadianTimeSlicesNumOfStationsByCycle( int(cycle_m28) )
 elif casetype == 'rfc':
    numofstationsintimeslices_m1 = \
 		com_m1.getRFCTimeSeriesNumOfStationsByCycle( int(cycle_m1) )
    numofstationsintimeslices_m2 = \
 		com_m2.getRFCTimeSeriesNumOfStationsByCycle( int(cycle_m2) )
+   numofstationsintimeslices_m3 = \
+		com_m3.getRFCTimeSeriesNumOfStationsByCycle( int(cycle_m3) )
    numofstationsintimeslices_m4 = \
 		com_m4.getRFCTimeSeriesNumOfStationsByCycle( int(cycle_m4) )
+   numofstationsintimeslices_m6 = \
+		com_m6.getRFCTimeSeriesNumOfStationsByCycle( int(cycle_m6) )
+   numofstationsintimeslices_m12 = \
+		com_m12.getRFCTimeSeriesNumOfStationsByCycle( int(cycle_m12) )
+   numofstationsintimeslices_m28 = \
+		com_m28.getRFCTimeSeriesNumOfStationsByCycle( int(cycle_m28) )
 else:
   print( 'casetype: ', casetype, ' unknown!')
   sys.exit()
@@ -168,9 +216,33 @@ else:
    else:
       outf.write( '\t0\t0\t0\t0')
 
+if numofstationsintimeslices_m3:
+   outf.write('\t')
+   outf.write( str( numofstationsintimeslices_m3[0][1]) )
+else:
+   outf.write( '\t0' )
+
 if numofstationsintimeslices_m4:
    outf.write('\t')
    outf.write( str( numofstationsintimeslices_m4[0][1]) )
+else:
+   outf.write( '\t0' )
+
+if numofstationsintimeslices_m6:
+   outf.write('\t')
+   outf.write( str( numofstationsintimeslices_m6[0][1]) )
+else:
+   outf.write( '\t0' )
+
+if numofstationsintimeslices_m12:
+   outf.write('\t')
+   outf.write( str( numofstationsintimeslices_m12[0][1]) )
+else:
+   outf.write( '\t0' )
+
+if numofstationsintimeslices_m28:
+   outf.write('\t')
+   outf.write( str( numofstationsintimeslices_m28[0][1]) )
 else:
    outf.write( '\t0' )
 

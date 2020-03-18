@@ -42,4 +42,4 @@ cd /gpfs/hps3/ptmp/Zhengtao.Cui/cycle_${casetype}_num_of_stations
 
 #scp ./CycleNumberOf${casetype^^}Stations.pdf surge:/gpfs/hps3/nwc/save/Zhengtao.Cui/Real_time_${casetype^^}_Number_of_Stations/CycleNumberOf${casetype^^}Stations_$(date +"%Y_%m_%d").pdf
 
-#echo -e "${casetype^^} number of stations as seen by model at each cycle." | mail -s "Real-time ${casetype^^} Number of Stations versus cycle" -a ./CycleNumberOf${casetype^^}Stations.pdf -r 'Zhengtao.Cui@noaa.gov' Zhengtao.Cui@noaa.gov,brian.cosgrove@noaa.gov,jamesmcc@ucar.edu,gochis@ucar.edu,mehdi.rezaeianzadeh@noaa.gov 
+echo -e "${casetype^^} number of stations as seen by model at each cycle." | mail -s "Real-time ${casetype^^} Number of Stations versus cycle" -a ./CycleNumberOf${casetype^^}Stations.pdf -r 'Zhengtao.Cui@noaa.gov' Zhengtao.Cui@noaa.gov,brian.cosgrove@noaa.gov,jamesmcc@ucar.edu,gochis@ucar.edu,mehdi.rezaeianzadeh@noaa.gov 

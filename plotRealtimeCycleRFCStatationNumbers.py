@@ -61,14 +61,20 @@ title = pgmopt[2]
 station_date = []
 station_num = []
 
-for i in range(0, 4):
+for i in range(0, 8):
 	station_num.append( [] )
 
 infile = open( input, 'r' )
 
 for line in infile:
    values = line.split()
-   for i in range( 0, 4 ): 
+# [ '-00 min.', '-60 min.', 
+#     0            1   
+# '-120 min.', '-180 min',   \
+#     2            3       
+# '-240 min', '-360 min', '-12 hr', '-28 hr' ]
+#    4           5          6        7
+   for i in range( 0, 8 ): 
       try:
               station_num[ i ].append( int( values[ i + 1 ] ) )
       except:
@@ -77,7 +83,9 @@ for line in infile:
    station_date.append( datetime.strptime( values[0], "%Y-%m-%d_%H:%M:%S" ) )
 
 
-legd_labels = [ '-00 min.', '-60 min.', '-120 min.', '-240 min' ]
+legd_labels = [ '0 hr', '-1 hr',  \
+		'-2 hr', '-3 hr', \
+                '-4 hr', '-6 hr', '-12 hr', '-28 hr' ]
 
 linestyles = [ '-', '--', ':', '-.']
 markers = ['o','^',',', '.', 'x' ]
@@ -95,7 +103,7 @@ ax.xaxis.set_minor_formatter( mdates.DateFormatter('%Hz' ))
 
 #fig.autofmt_xdate()
 
-for i in [0, 1, 2, 3]:
+for i in [1, 2, 3, 4, 5, 6]:
       print( i )
       numofstationsplot, = ax.plot_date( station_date, station_num[i], \
 	      linestyle=linestyles[ i % 4 ], label=legd_labels[ i ], \

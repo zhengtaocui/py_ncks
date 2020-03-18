@@ -61,14 +61,20 @@ title = pgmopt[2]
 station_date = []
 station_num = []
 
-for i in range(0, 10):
+for i in range(0, 14):
 	station_num.append( [] )
 
 infile = open( input, 'r' )
 
 for line in infile:
    values = line.split()
-   for i in range( 0, 10 ): 
+# [ '-00 min.', '-60 min.', '-45 min.', '-30 min.', '-15 min.', \
+#     0            1          2           3            4
+# '-120 min.', '-105 min', '-90 min,', '-75 min', '-180 min',   \
+#     5            6          7            8          9
+# '-240 min', '-360 min', '-12 hr', '-28 hr' ]
+#    10         11          12        13
+   for i in range( 0, 14 ): 
       try:
               station_num[ i ].append( int( values[ i + 1 ] ) )
       except:
@@ -77,8 +83,9 @@ for line in infile:
    station_date.append( datetime.strptime( values[0], "%Y-%m-%d_%H:%M:%S" ) )
 
 
-legd_labels = [ '-00 min.', '-60 min.', '-45 min.', '-30 min.', '-15 min.', \
-		'-120 min.', '-105 min', '-90 min,', '-75 min', '-240 min' ]
+legd_labels = [ '0 hr', '-1 hr', '-45 min.', '-30 min.', '-15 min.', \
+		'-2 hr', '-105 min', '-90 min,', '-75 min', '-3 hr', \
+                '-4 hr', '-6 hr', '-12 hr', '-28 hr' ]
 
 linestyles = [ '-', '--', ':', '-.']
 markers = ['o','^',',', '.', 'x' ]
@@ -96,11 +103,46 @@ ax.xaxis.set_minor_formatter( mdates.DateFormatter('%Hz' ))
 
 #fig.autofmt_xdate()
 
-for i in [0, 4, 3, 2, 1, 8, 7, 6, 5, 9]:
+#for i in [0, 4, 3, 2, 1, 8, 7, 6, 5, 9]:
+for i in [0, 1, 5, 9, 13]:
       print( i )
       numofstationsplot, = ax.plot_date( station_date, station_num[i], \
 	      linestyle=linestyles[ i % 4 ], label=legd_labels[ i ], \
             marker=markers[ i % 5 ], markersize=5, markerfacecolor='None', color='k' )
+
+if title.startswith('USGS'):
+   ax.axhline(y=8100, linewidth=2, color='r')
+   ax.text(station_date[0] - timedelta( hours =1 ),
+                8100, 'Low water mark', verticalalignment='top', color='r') 
+elif title.startswith('CANADIAN'):
+   ax.axhline(y=1600, linewidth=2, color='r')
+   ax.text(station_date[0] - timedelta( hours =1 ),
+                1600, 'Low water mark', verticalalignment='top', color='r') 
+elif title.startswith('USACE'):
+   ax.axhline(y=160, linewidth=2, color='r')
+   ax.text(station_date[0] - timedelta( hours =1 ),
+                160, 'Low water mark', verticalalignment='top', color='r') 
+else:
+   pass
+
+#box = ax.get_position()
+#ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+
+ax.xaxis.set_major_locator( mdates.DayLocator() )
+ax.xaxis.set_minor_locator( mdates.HourLocator( interval=2) )
+
+ax.tick_params(axis='x', rotation=90)
+
+#ax.yaxis.set_major_locator( MultipleLocator(20) )
+
+ax.set_xlim( station_date[0] - timedelta( hours=1), \
+		station_date[-1] + timedelta( hours = 1 ) )
+
+#ax.set_ylim(0, 1000)
+
+
+ax.grid( True, "minor", "x" )
+ax.grid( True, "major", "y" )
 
 #box = ax.get_position()
 #ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
