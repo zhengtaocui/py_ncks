@@ -109,6 +109,9 @@ for i in [1, 2, 3, 4, 5, 6]:
 	      linestyle=linestyles[ i % 4 ], label=legd_labels[ i ], \
             marker=markers[ i % 5 ], markersize=5, markerfacecolor='None', color='k' )
 
+ax.axhline(y=210, linewidth=2, color='r')
+ax.text(station_date[0] - timedelta( minutes = 40 ),
+                210, 'Low water mark', verticalalignment='top', color='r') 
 #box = ax.get_position()
 #ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 
