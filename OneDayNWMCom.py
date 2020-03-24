@@ -65,6 +65,20 @@ class OneDayNWMCom:
                break
           return numofstations
 
+      def getEachRFCTimeSeriesUniqueStations( self, rfcsites ):
+           rfcs = [ 'AB', 'SE', 'LM', 'MA', 'NE', 'WG', 'MB', 'CN', 'NW', \
+                   'NC', 'CB', 'OH' ]
+
+           #rfc_all_stations = dict.fromkeys( rfcs, set() )
+           rfc_all_stations = dict( [ (r, set()) for r in rfcs ] )
+           for com in self.oneDayCom:
+               rfc_stations = com.getEachRFCTimeSeriesUniqueStations( rfcsites )
+               for rfc in rfcs:
+                 rfc_all_stations[ rfc ].update( rfc_stations[ rfc ] )
+
+           return rfc_all_stations
+                
+
       def getUSGSStationRealTimeStreamFlow( self, stationId ):
           flows = []
           for com in self.oneDayCom:

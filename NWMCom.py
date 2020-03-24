@@ -352,6 +352,23 @@ class NWMCom:
 #                            for f in missingfiles:
 #                                    print "    " + f
        
+      def getEachRFCTimeSeriesUniqueStations( self, rfcsites ):
+              stapattern = '^.*/.*\.60min.([A-Z]{4}[0-9])\.RFCTimeSeries\.ncdf'
+              rfcs = [ 'AB', 'SE', 'LM', 'MA', 'NE', 'WG', 'MB', 'CN', 'NW', \
+                     'NC', 'CB', 'OH' ]
+
+              #rfc_stations = dict.fromkeys( rfcs, set() )
+              rfc_stations = dict( [ (r,set()) for r in rfcs ] )
+              fn = self.dir + '/nwm.' + self.pdy + '/rfc_timeseries/' + \
+                              self.filenames[ 'rfc_timeseries' ][ 0 ]
+              for f in glob.glob( fn ):
+                  idmatch = re.match( stapattern, f )
+                  if idmatch:
+                     rfcname = rfcsites.getRFCBySite( idmatch.groups()[0] )[0:2]
+                     rfc_stations[ rfcname ].add( idmatch.groups()[0] )
+
+              return rfc_stations
+
       def getRFCTimeSeriesNumberOfStations( self ):
               fn = self.dir + '/nwm.' + self.pdy + '/rfc_timeseries/' + \
                               self.filenames[ 'rfc_timeseries' ][ 0 ]
