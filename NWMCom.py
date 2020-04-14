@@ -364,8 +364,10 @@ class NWMCom:
               for f in glob.glob( fn ):
                   idmatch = re.match( stapattern, f )
                   if idmatch:
-                     rfcname = rfcsites.getRFCBySite( idmatch.groups()[0] )[0:2]
-                     rfc_stations[ rfcname ].add( idmatch.groups()[0] )
+                     if rfcsites.getRFCBySite( idmatch.groups()[0] ):
+                        rfcname = \
+                            rfcsites.getRFCBySite( idmatch.groups()[0] )[0:2]
+                        rfc_stations[ rfcname ].add( idmatch.groups()[0] )
 
               return rfc_stations
 
