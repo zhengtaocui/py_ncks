@@ -43,7 +43,7 @@ class OneDayNWMCom:
           for com in self.oneDayCom:
              if com.cycle == format( cycle, ">02d" ):
                numofstations += \
-                        com.getTimeSlicesNumberOfStations('ace_timeslices' )
+                        com.getTimeSlicesNumberOfStations('usace_timeslices' )
                break
           return numofstations
 

@@ -48,7 +48,7 @@ class NWMCom:
                                  ('restart_extend', []),            \
                                  ('restart_hawaii', []),            \
                                  ('restart_long', []),            \
-                                 ('ace_timeslices', []),            \
+                                 ('usace_timeslices', []),            \
                                  ('canada_timeslices', []),            \
                                  ('rfc_timeseries', []),            \
                                  ('usgs_timeslices', []) ] )
@@ -198,12 +198,12 @@ class NWMCom:
                             caseType[22:23] + \
                             '.forcing.f' + format( i, ">03") + '.conus.nc' )
 
-              elif caseType == "ace_timeslices" :
+              elif caseType == "usace_timeslices" :
                  dt = \
                   datetime.strptime( self.pdy+self.cycle, "%Y%m%d%H" )
                  for i in range(0, 4 ):
                     d = timedelta( minutes = i * 15 )
-                    self.filenames['ace_timeslices'].append(
+                    self.filenames['usace_timeslices'].append(
                      ( dt +  d ).strftime( "%Y-%m-%d_%H:%M:00." ) + \
                      '15min.usaceTimeSlice.ncdf' )
 
