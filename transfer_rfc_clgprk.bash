@@ -10,6 +10,8 @@ cd $reservoiroutput
 
 wget -N --user=ftpin705 --password="Kk+Y/cDerZUOhjjnx4Nfeg==" -a ${rfclog}/log.txt ftp://ftps-in1.cprk.ncep.noaa.gov/in/*[NM][BC]* 
 
+wget -N --user=ftpin705 --password="Kk+Y/cDerZUOhjjnx4Nfeg==" -a ${rfclog}/log.txt ftp://ftps-in1.bldr.ncep.noaa.gov/in/*[NM][BC]* 
+
 reservoirarchieve="/gpfs/hps3/nwc/noscrub/Zhengtao.Cui/rfc_reservoir"
 if [ ! -e $reservoirarchieve ]; then mkdir -p $reservoirarchieve; fi
 
