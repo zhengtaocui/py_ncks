@@ -1,6 +1,6 @@
 #!/bin/bash
 
-reservoiroutput="/gpfs/hps3/ptmp/Zhengtao.Cui/RFC_data/Reservoir"
+reservoiroutput="/gpfs/hps3/ptmp/Zhengtao.Cui/dev/RFC_data/Reservoir"
 if [ ! -e $reservoiroutput ]; then mkdir -p $reservoiroutput; fi
 rfclog="/gpfs/hps3/ptmp/Zhengtao.Cui/Rfclog"
 
