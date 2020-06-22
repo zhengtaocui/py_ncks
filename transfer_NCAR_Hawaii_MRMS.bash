@@ -9,6 +9,7 @@ RDIR="/pub/gaydos/Hawaii_MRMS"
 ncarlogdir="$LDIR/logs"
 if [ ! -e $ncarlogdir ]; then mkdir -p $ncarlogdir; fi
                 # only start if the cd was successful
+#  -A 'MRMS/EXP/MultiSensor/*/MRMS_EXP_MultiSensor_QPE_01H_Pass1*' \
 cd $LDIR && \
 wget \
   --continue \
@@ -18,4 +19,5 @@ wget \
   --ftp-user=$USER    \
   --ftp-password=$PASS  \
   -a $ncarlogdir/ncar_hawaii_mrms_log.txt \
+  -A '*MRMS_EXP_MultiSensor_QPE_01H_Pass1*' \
   ftp://$HOST/$RDIR
