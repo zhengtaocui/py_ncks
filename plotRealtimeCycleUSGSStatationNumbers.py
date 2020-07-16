@@ -115,9 +115,9 @@ if title.startswith('USGS'):
    ax.text(station_date[0] - timedelta( minutes = 40 ),
                 8100, 'Low water mark', verticalalignment='top', color='r') 
 elif title.startswith('CANADIAN'):
-   ax.axhline(y=1600, linewidth=2, color='r')
+   ax.axhline(y=400, linewidth=2, color='r')
    ax.text(station_date[0] - timedelta( minutes = 40 ),
-                1600, 'Low water mark', verticalalignment='top', color='r') 
+                400, 'Low water mark', verticalalignment='top', color='r') 
 elif title.startswith('USACE'):
    ax.axhline(y=160, linewidth=2, color='r')
    ax.text(station_date[0] - timedelta( minutes = 40 ),
