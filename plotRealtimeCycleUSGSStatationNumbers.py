@@ -119,9 +119,9 @@ elif title.startswith('CANADIAN'):
    ax.text(station_date[0] - timedelta( minutes = 40 ),
                 400, 'Low water mark', verticalalignment='top', color='r') 
 elif title.startswith('USACE'):
-   ax.axhline(y=160, linewidth=2, color='r')
+   ax.axhline(y=120, linewidth=2, color='r')
    ax.text(station_date[0] - timedelta( minutes = 40 ),
-                160, 'Low water mark', verticalalignment='top', color='r') 
+                120, 'Low water mark', verticalalignment='top', color='r') 
 else:
    pass
 
