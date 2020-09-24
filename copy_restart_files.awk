@@ -11,7 +11,7 @@ NR <=7 {next}
 {
    str = $1
 
-   gsub( /Donald\.W.Johnson\/nwtest_output/, "Zhengtao\.Cui\/nwtest_output", str) 
+   gsub( /Donald\.W\.Johnson\/nwtest_output/, "Zhengtao.Cui/nwtest_output", str) 
 #   str1 = gensub( /^(\/.+)\/[^\/]*\/?$/, "\\1", "g", str)
    str1 = gensub( /\/[^\/]*\/?$/, "", "g", str)
   # gsub( /\/[^\/]*\/?$/, "", str1)
