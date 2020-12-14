@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 
 import os, sys, time, urllib, getopt, copy
 import gzip, shutil, re
@@ -17,18 +17,18 @@ def main(argv):
    try:
 	   opts, args = getopt.getopt(argv,"hd:t:c:",["dir=", "pdy=", "cyc=" ])
    except getopt.GetoptError:
-      print 'checkNWMProducts.py -d <comdir> -t <pdy> -c <cycle>' 
+      print( 'checkNWMProducts.py -d <comdir> -t <pdy> -c <cycle>' )
       sys.exit(2)
    for opt, arg in opts:
-      print opt, arg
+      print( opt, arg )
       if opt == '-h':
-         print 'checkNWMProducts.py -d <comdir> -t <pdy> -c <cycle>' 
+         print( 'checkNWMProducts.py -d <comdir> -t <pdy> -c <cycle>' )
          sys.exit()
       elif opt in ('-d', "--dir"):
          comdir = arg
          if not os.path.exists( comdir ):
            if not os.path.isdir( comdir ):
-             print 'com dir ', comdir, ' does not exist!'
+             print( 'com dir ', comdir, ' does not exist!')
              sys.exit()
       elif opt in ('-t', "--pdy" ):
          pdy = arg
@@ -51,33 +51,40 @@ cycle = pgmopt[2]
 
 nwmcom = NWMCom( comdir, pdy, cycle )
 
-nwmcom.checkProducts( 'short_range')
-nwmcom.checkProducts( 'analysis_assim')
-nwmcom.checkProducts( 'usgs_timeslices')
-nwmcom.checkProducts( 'forcing_short_range')
-nwmcom.checkProducts( 'forcing_analysis_assim')
-nwmcom.checkProducts( 'restart')
+missing = nwmcom.checkAllProducts()
 
-if cycle == '06':
-   nwmcom.checkProducts( 'medium_range')
-   nwmcom.checkProducts( 'long_range_mem1')
-   nwmcom.checkProducts( 'long_range_mem2')
-   nwmcom.checkProducts( 'long_range_mem3')
-   nwmcom.checkProducts( 'long_range_mem4')
-   nwmcom.checkProducts( 'forcing_medium_range')
-   nwmcom.checkProducts( 'forcing_long_range_mem1')
-   nwmcom.checkProducts( 'forcing_long_range_mem2')
-   nwmcom.checkProducts( 'forcing_long_range_mem3')
-   nwmcom.checkProducts( 'forcing_long_range_mem4')
+if missing:
+   print( 'missing files:' )
+   for f in missing:
+       print( f )
 
-if cycle == '00' or cycle == '12' or cycle == 18:
-   nwmcom.checkProducts( 'long_range_mem1')
-   nwmcom.checkProducts( 'long_range_mem2')
-   nwmcom.checkProducts( 'long_range_mem3')
-   nwmcom.checkProducts( 'long_range_mem4')
-   nwmcom.checkProducts( 'forcing_long_range_mem1')
-   nwmcom.checkProducts( 'forcing_long_range_mem2')
-   nwmcom.checkProducts( 'forcing_long_range_mem3')
-   nwmcom.checkProducts( 'forcing_long_range_mem4')
-#cleaning up
-
+#nwmcom.checkProducts( 'short_range')
+#nwmcom.checkProducts( 'analysis_assim')
+#nwmcom.checkProducts( 'usgs_timeslices')
+#nwmcom.checkProducts( 'forcing_short_range')
+#nwmcom.checkProducts( 'forcing_analysis_assim')
+#nwmcom.checkProducts( 'restart')
+#
+#if cycle == '06':
+#   nwmcom.checkProducts( 'medium_range')
+#   nwmcom.checkProducts( 'long_range_mem1')
+#   nwmcom.checkProducts( 'long_range_mem2')
+#   nwmcom.checkProducts( 'long_range_mem3')
+#   nwmcom.checkProducts( 'long_range_mem4')
+#   nwmcom.checkProducts( 'forcing_medium_range')
+#   nwmcom.checkProducts( 'forcing_long_range_mem1')
+#   nwmcom.checkProducts( 'forcing_long_range_mem2')
+#   nwmcom.checkProducts( 'forcing_long_range_mem3')
+#   nwmcom.checkProducts( 'forcing_long_range_mem4')
+#
+#if cycle == '00' or cycle == '12' or cycle == 18:
+#   nwmcom.checkProducts( 'long_range_mem1')
+#   nwmcom.checkProducts( 'long_range_mem2')
+#   nwmcom.checkProducts( 'long_range_mem3')
+#   nwmcom.checkProducts( 'long_range_mem4')
+#   nwmcom.checkProducts( 'forcing_long_range_mem1')
+#   nwmcom.checkProducts( 'forcing_long_range_mem2')
+#   nwmcom.checkProducts( 'forcing_long_range_mem3')
+#   nwmcom.checkProducts( 'forcing_long_range_mem4')
+##cleaning up
+#

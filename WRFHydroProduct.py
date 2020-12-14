@@ -77,11 +77,11 @@ class WRFHydroModelProduct:
                 or re.match( r'nudgingLastObs\..*\.nc', self.prodId ): 
                       return 'restart'
               elif re.match( \
-                      r'.*\/nwm.t[0-9]{2}z\..*\.(tm[0-9]{2}|f[0-9]{3})\.(conus|hawaii)\.nc',\
+                      r'.*\/nwm.t[0-9]{2}z\..*\.(tm[0-9]{2}|f[0-9]{3})\.(conus|hawaii|puertorico)\.nc',\
                               self.prodId ):
 
                       m = re.match( \
-                       r'.*\/nwm.t[0-9]{2}z\.(.*)\.(.*)\.(tm[0-9]{2}|f[0-9]{3})\.(conus|hawaii)\.nc', self.prodId )
+                       r'.*\/nwm.t[0-9]{2}z\.(.*)\.(.*)\.(tm[0-9]{2}|f[0-9]{3})\.(conus|hawaii|puertorico)\.nc', self.prodId )
                       return m.group(2)
 
               else:
