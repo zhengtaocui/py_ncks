@@ -609,11 +609,11 @@ class NWMCom:
       def checkAllProducts( self ):
             missing = []
             for c in self.filenames:
-              print( c )
+#              print( c )
               for f in self.filenames[ c ]:
                    fn = self.dir + '/nwm.' + self.pdy + \
                                    '/' + c + '/' + f
-                   print( "           " + fn )
+#                   print( "           " + fn )
                    if not ( os.path.exists( fn ) and os.path.isfile( fn ) ):
                            missing.append( fn )
             return missing 
